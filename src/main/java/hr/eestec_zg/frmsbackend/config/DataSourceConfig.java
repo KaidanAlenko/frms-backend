@@ -2,7 +2,6 @@ package hr.eestec_zg.frmsbackend.config;
 
 import hr.eestec_zg.frmsbackend.utilities.FrmsNamingStrategy;
 import hr.eestec_zg.frmsbackend.utilities.Util;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -31,10 +30,14 @@ import static org.hibernate.cfg.AvailableSettings.USE_STREAMS_FOR_BINARY;
 @EnableTransactionManagement(proxyTargetClass = true)
 public class DataSourceConfig implements TransactionManagementConfigurer {
 
-    @Autowired
-    private DataSource dataSource;
-    @Autowired
-    private Properties hibernateProperties;
+    private final DataSource dataSource;
+    private final Properties hibernateProperties;
+
+    @SuppressWarnings("SpringJavaAutowiringInspection")
+    public DataSourceConfig(DataSource dataSource, Properties hibernateProperties) {
+        this.dataSource = dataSource;
+        this.hibernateProperties = hibernateProperties;
+    }
 
     @Bean
     public LocalSessionFactoryBean sessionFactory() {
