@@ -1,6 +1,6 @@
 package hr.eestec_zg.frmsbackend.domain;
 
-import hr.eestec_zg.frmsbackend.models.User;
+import hr.eestec_zg.frmsbackend.domain.models.User;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 

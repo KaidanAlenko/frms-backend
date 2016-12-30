@@ -1,4 +1,4 @@
-package hr.eestec_zg.frmsbackend.models;
+package hr.eestec_zg.frmsbackend.domain.models;
 
 import java.io.Serializable;
 

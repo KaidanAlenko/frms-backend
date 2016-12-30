@@ -1,4 +1,4 @@
-package hr.eestec_zg.frmsbackend.models;
+package hr.eestec_zg.frmsbackend.domain.models;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -6,13 +6,15 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "users")
 public class User {
-    @Id
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @NotEmpty
     @Column(nullable = false)
