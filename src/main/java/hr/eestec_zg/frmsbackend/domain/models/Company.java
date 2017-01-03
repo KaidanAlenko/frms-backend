@@ -14,7 +14,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "company")
 public class Company {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @NotEmpty
     @Column(nullable = false, unique = true)
@@ -30,6 +31,13 @@ public class Company {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private CompanyType type;
+
+    private Company() {
+    }
+
+    public Company(String name, String shortName, CompanyType companyType) {
+        this(name, shortName, null, null, null, companyType);
+    }
 
     public Company(String name, String shortName, String webAddress, String address, String notes, CompanyType type) {
         this.name = name;

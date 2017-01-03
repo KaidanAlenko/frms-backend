@@ -23,6 +23,8 @@ public class Event {
     @Column(nullable = false)
     private String year;
 
+    private Event() {}
+
     public Event(String name, String shortName, String year) {
         this.name = name;
         this.shortName = shortName;
