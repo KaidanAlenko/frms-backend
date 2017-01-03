@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.Callable;
 
 public class Util {
@@ -46,6 +47,10 @@ public class Util {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static String randomUUID() {
+        return UUID.randomUUID().toString();
     }
 
 }
