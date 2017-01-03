@@ -15,7 +15,7 @@ Glossary:
 ## Environment setup (Linux)
 
 ### Prerequisites
-Install all necessary tools using instructions on [Wiki]([Wiki](https://github.com/KaidanAlenko/frms-backend/wiki/Upute-za-instalaciju-potrebnih-alata) pages of backend project.
+Install all necessary tools using instructions on [Wiki](https://github.com/KaidanAlenko/frms-backend/wiki/Upute-za-instalaciju-potrebnih-alata) pages of backend project.
 
 ### Clone repository
 Clone this repository using HTTPS or SSH and import it to IDEA as Maven project.
