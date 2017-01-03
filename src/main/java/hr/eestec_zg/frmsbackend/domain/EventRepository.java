@@ -2,8 +2,8 @@ package hr.eestec_zg.frmsbackend.domain;
 
 import hr.eestec_zg.frmsbackend.domain.models.Event;
 
-import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
+import java.util.function.Predicate;
 
 public interface EventRepository {
     void createEvent(Event event);
@@ -12,7 +12,15 @@ public interface EventRepository {
 
     void deleteEvent(Event event);
 
-    Event getEvent(CriteriaQuery<Event> criteria);
+    Event getEvent(Long id);
 
-    List<Event> getEvents(CriteriaQuery<Event> criteria);
+    Event getEventByName(String name);
+
+    List<Event> getEventsByYear(String year);
+
+    List<Event> getEvents(Predicate<Event> condition);
+
+    default List<Event> getEvents() {
+        return getEvents(e -> true);
+    }
 }

@@ -2,8 +2,8 @@ package hr.eestec_zg.frmsbackend.domain;
 
 import hr.eestec_zg.frmsbackend.domain.models.Company;
 
-import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
+import java.util.function.Predicate;
 
 public interface CompanyRepository {
     void createCompany(Company company);
@@ -12,7 +12,13 @@ public interface CompanyRepository {
 
     void deleteCompany(Company company);
 
-    Company getCompany(CriteriaQuery<Company> criteria);
+    Company getCompany(Long id);
 
-    List<Company> getCompanies(CriteriaQuery<Company> criteria);
+    Company getCompanyByName(String name);
+
+    List<Company> getCompanies(Predicate<Company> condition);
+
+    default List<Company> getCompanies() {
+        return getCompanies(c -> true);
+    }
 }
