@@ -38,6 +38,21 @@ public class Task {
     @Column
     private String notes;
 
+    public Task() {}
+
+    public Task(Event event, Company company, User assignee, SponsorshipType type, ZonedDateTime callTime,
+                ZonedDateTime mailTime, ZonedDateTime followUpTime, TaskStatus status, String notes) {
+        this.event = event;
+        this.company = company;
+        this.assignee = assignee;
+        this.type = type;
+        this.callTime = callTime;
+        this.mailTime = mailTime;
+        this.followUpTime = followUpTime;
+        this.status = status;
+        this.notes = notes;
+    }
+
     public long getId() {
         return id;
     }

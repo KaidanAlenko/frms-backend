@@ -37,6 +37,17 @@ public class User {
     @Column(nullable = false)
     private Role role;
 
+    public User() {}
+
+    public User(String firstName, String lastName, String email, String password, String phoneNumber, Role role) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+        this.role = role;
+    }
+
     public long getId() {
         return id;
     }

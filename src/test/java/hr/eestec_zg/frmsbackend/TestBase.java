@@ -1,6 +1,10 @@
 package hr.eestec_zg.frmsbackend;
 
 import config.TestAppConfig;
+import hr.eestec_zg.frmsbackend.domain.CompanyRepository;
+import hr.eestec_zg.frmsbackend.domain.EventRepository;
+import hr.eestec_zg.frmsbackend.domain.TaskRepository;
+import hr.eestec_zg.frmsbackend.domain.UserRepository;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +27,14 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 public abstract class TestBase {
     @Autowired
     protected WebApplicationContext context;
+    @Autowired
+    protected UserRepository userRepository;
+    @Autowired
+    protected CompanyRepository companyRepository;
+    @Autowired
+    protected TaskRepository taskRepository;
+    @Autowired
+    protected EventRepository eventRepository;
 
     MockMvc mvc;
 
