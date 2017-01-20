@@ -35,6 +35,8 @@ public abstract class TestBase {
     protected TaskRepository taskRepository;
     @Autowired
     protected EventRepository eventRepository;
+    @Autowired
+    protected UserRepository emptyUserRepository;
 
     MockMvc mvc;
 

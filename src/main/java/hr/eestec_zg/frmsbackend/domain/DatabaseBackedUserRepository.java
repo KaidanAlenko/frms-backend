@@ -55,11 +55,13 @@ public class DatabaseBackedUserRepository extends AbstractRepository<Long, User>
 
     @Override
     public User getUserByEmail(String email) {
+
         return findByParameter(EMAIL, email);
     }
 
     @Override
     public User getUserByPhoneNumber(String phoneNumber) {
+
         return findByParameter(PHONE_NUMBER, phoneNumber);
     }
 
