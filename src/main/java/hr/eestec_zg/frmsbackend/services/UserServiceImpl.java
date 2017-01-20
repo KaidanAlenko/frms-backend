@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getUsersByRole(Role role) {
         if(role == null){
-            throw new RoleNotDefinedException();
+            throw new IllegalArgumentException("Role not defined");
         }
         List <User> allUsersByRole = userRepository.getUsersByRole(role);
         if(allUsersByRole==null){
@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getUsersByName(String firstName, String lastName) {
         if (firstName==null && lastName==null){
-            throw new NameNotDefinedException();
+            throw new IllegalArgumentException("First and last name not defined");
         }
         List <User> usersByName = userRepository.getUsersByName(firstName,lastName);
         if(usersByName==null){
@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserByPhoneNumber(String phoneNumber) {
         if(phoneNumber==null){
-            throw new PhoneNumberNotDefinedException();
+            throw new IllegalArgumentException("Phone number not defined");
         }
         User userByNumber =userRepository.getUserByPhoneNumber(phoneNumber);
         if(userByNumber==null){
@@ -81,7 +81,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserByEmail(String email) {
         if (email==null){
-            throw new EmailNotDefinedException();
+            throw new IllegalArgumentException("Email not defined");
         }
         User userByEmail = userRepository.getUserByEmail(email);
         if(userByEmail == null){
@@ -93,7 +93,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserById(Long id) {
         if(id==null){
-            throw new IdNotDefinedException();
+            throw new IllegalArgumentException("Id not defined");
         }
         User userById = userRepository.getUser(id);
         if(userById == null){
