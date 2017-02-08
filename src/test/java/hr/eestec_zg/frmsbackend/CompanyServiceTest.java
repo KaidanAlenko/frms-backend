@@ -1,0 +1,104 @@
+package hr.eestec_zg.frmsbackend;
+
+import hr.eestec_zg.frmsbackend.domain.models.*;
+import hr.eestec_zg.frmsbackend.exceptions.CompanyNotFoundException;
+import hr.eestec_zg.frmsbackend.services.CompanyService;
+import org.junit.Before;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static hr.eestec_zg.frmsbackend.domain.models.CompanyType.COMPUTING;
+import static org.junit.Assert.*;
+
+public class CompanyServiceTest  extends TestBase{
+    @Autowired
+    private CompanyService companyService;
+    private Company company,company2,company3,company4;
+
+    @Before
+    public void setTestData(){
+        company = new Company("span", "S", COMPUTING);
+        company2 = new Company("infobip", "IB", COMPUTING);
+       // company4 = new Company("asd",  "GfL",  "gfll.com", "vukofvarska 2", "poruke", CompanyType.ELECTRONICS);
+        companyRepository.createCompany(company);
+        companyRepository.createCompany(company2);
+    }
+
+    @Test
+    public void testGetCompanyByName()
+    {Company company3 = companyService.getCompanyByName("span");
+    assertNotNull(company3);
+    }
+
+    @Test(expected=CompanyNotFoundException.class)
+    public void testGetCompanyByNameFail()
+    {Company company3 = companyService.getCompanyByName("pasn");
+    }
+    @Test(expected=IllegalArgumentException.class)
+    public void testIllegalArgumentException() {
+        companyService.deleteCompany(null);
+    }
+    @Test(expected=CompanyNotFoundException.class)
+    public void testCompanyNotFoundExceptionDelete() {
+        Company company3 = companyService.getCompanyByName("pasn");
+        companyService.deleteCompany(company3.getId());
+    }
+
+    @Test
+    public void testUpdateCompany()
+    {Company company3 = companyService.getCompanyByName("span");
+     company3.setAddress("asfasfas");
+        companyService.updateCompany(company3);
+     company4 = companyService.getCompanyByName("span");
+     String add = company4.getAddress();
+     String shortn = company4.getShortName();
+     assertEquals(add, "asfasfas");
+     assertEquals(shortn, "S");
+    }
+
+    @Test // FIXME: 07.02.17.
+    public void testGetCompaniesByType()
+    { company3 = new Company("globallogic",  "GL",  "gll.com", "vukovarska 2", "poruke", CompanyType.COMPUTING);
+   //ako se doda company_type AUTOMATIZATION /(AUTOMATIZATION) is not present in table "company_type". ????
+        companyService.createCompany(company3);
+    List<Company> companies = companyService.getCompaniesByType(CompanyType.COMPUTING);
+   // List<Company> companies2 = companyService.getCompaniesByType(CompanyType.AUTOMATIZATION);
+
+    assertTrue ( companies.size()==3 && companies.contains(company) && companies.contains(company2));
+    }
+
+    @Test
+    public void testGetCompaniesByTypeFail()
+    {
+        List<Company> companies = companyService.getCompaniesByType(CompanyType.AUTOMATIZATION);
+        assertEquals(0, companies.size());
+    }
+
+    @Test
+    public void testCreateCompanyAutomatization()
+    {
+        company3 = new Company("globallogic",  "GL",  "gll.com", "vukovarska 2", "poruke", CompanyType.AUTOMATIZATION);
+        companyService.createCompany(company3);
+        List<Company> companies = companyService.getCompaniesByType(CompanyType.AUTOMATIZATION);
+        assertTrue ( companies.size()==1 && companies.contains(company3));
+    }
+
+    @Test
+    public void testCreateDeleteCompany()
+    {
+        Long a = company.getId();
+        companyService.deleteCompany(a);
+        a++;
+        companyService.deleteCompany(a);
+        List<Company> companies = companyService.getCompaniesByType(CompanyType.COMPUTING);
+        assertEquals(0, companies.size());
+        company3 = new Company("globallogic",  "GL",  "gll.com", "vukovarska 2", "poruke", CompanyType.COMPUTING);
+        companyService.createCompany(company3);
+        companies = companyService.getCompaniesByType(CompanyType.COMPUTING);
+        assertTrue ( companies.size()==1 && companies.contains(company3));
+    }
+
+}
