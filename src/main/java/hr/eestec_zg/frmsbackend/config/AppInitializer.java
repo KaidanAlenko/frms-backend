@@ -30,7 +30,7 @@ public class AppInitializer extends AbstractAnnotationConfigDispatcherServletIni
         ctx.setInitParameter("spring.profiles.active", "production");
         ctx.addListener(new ServletContextListener() {
             public void contextInitialized(ServletContextEvent sce) {
-                logger.info("\n\n******************* Servlet Context initialized **************************\n"); // TODO replace sysout with logger
+                logger.info("\n\n******************* Servlet Context initialized **************************\n");
             }
             public void contextDestroyed(ServletContextEvent sce) {
                 logger.info("\n\n******************* Servlet Context destroyed **************************\n");
