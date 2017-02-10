@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -17,25 +18,30 @@ import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true, proxyTargetClass = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final AjaxAuthenticationSuccessHandler authSuccessHandler;
     private final AjaxAuthenticationFailureHandler authFailureHandler;
     private final AjaxLogoutSuccessHandler logoutSuccessHandler;
     private final CustomUserDetailsService customUserDetailsService;
+    private final CorsFilter corsFilter;
 
     public SecurityConfig(
             AjaxAuthenticationSuccessHandler authSuccessHandler,
             AjaxAuthenticationFailureHandler authFailureHandler,
             AjaxLogoutSuccessHandler logoutSuccessHandler,
-            CustomUserDetailsService customUserDetailsService) {
+            CustomUserDetailsService customUserDetailsService,
+            CorsFilter corsFilter) {
         this.authSuccessHandler = authSuccessHandler;
         this.authFailureHandler = authFailureHandler;
         this.logoutSuccessHandler = logoutSuccessHandler;
         this.customUserDetailsService = customUserDetailsService;
+        this.corsFilter = corsFilter;
     }
 
     @Bean
@@ -66,15 +72,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .and()
 
+                .authorizeRequests()
+                .antMatchers("/", "/home", "/login").permitAll()
+                .anyRequest().authenticated()
+                .and()
+
                 .logout()
                 .logoutUrl("/logout")
                 .logoutSuccessHandler(logoutSuccessHandler)
                 .deleteCookies("JSESSIONID")
                 .permitAll()
                 .and()
-
-                .authorizeRequests().anyRequest().authenticated()
-                .and()
+                .addFilterBefore(corsFilter, ChannelProcessingFilter.class)
                 .httpBasic();
     }
 
