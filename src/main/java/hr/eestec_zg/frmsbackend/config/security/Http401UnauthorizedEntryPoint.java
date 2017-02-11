@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
 /**
  * Returns a 401 error code (Unauthorized) to the client.
  */
@@ -16,6 +18,10 @@ import java.io.IOException;
 public class Http401UnauthorizedEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
                          AuthenticationException e) throws IOException, ServletException {
-        httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Access Denied");
+
+        httpServletResponse.setContentType(APPLICATION_JSON_VALUE);
+        httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        httpServletResponse.getOutputStream().println("{ \"statusMessage\": \"" + e.getMessage() + "\" }");
+
     }
 }
