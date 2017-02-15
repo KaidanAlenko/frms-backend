@@ -35,6 +35,10 @@ public class CustomUserDetailsService implements UserDetailsService {
                 true, true, true, true, getGrantedAuthorities(user));
     }
 
+    public User getUserDetails(String email) {
+        return userRepository.getUserByEmail(email);
+    }
+
     private List<GrantedAuthority> getGrantedAuthorities(User user) {
         List<GrantedAuthority> authorities = new LinkedList<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
