@@ -19,6 +19,6 @@ public class AjaxAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuc
         response.setStatus(HttpServletResponse.SC_OK);
 
         authentication = SecurityContextHolder.getContext().getAuthentication();
-        response.getWriter().print("{\"username\": \"" + authentication.getName() + "\"}");
+        response.getWriter().print("{\"email\": \"" + authentication.getName() + "\"}");
     }
 }
