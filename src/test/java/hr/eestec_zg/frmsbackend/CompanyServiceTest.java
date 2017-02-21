@@ -58,6 +58,7 @@ public class CompanyServiceTest extends TestBase {
         Company company3 = companyService.getCompanyByName("span");
         company3.setAddress("asfasfas");
         companyService.updateCompany(company3);
+
         Company company4 = companyService.getCompanyByName("span");
         String add = company4.getAddress();
         String shortn = company4.getShortName();
@@ -70,8 +71,9 @@ public class CompanyServiceTest extends TestBase {
         company3 = new Company("globallogic", "GL", "gll.com", "vukovarska 2", "poruke", CompanyType.AUTOMATIZATION);
         companyService.createCompany(company3);
         List<Company> companies = companyService.getCompaniesByType(CompanyType.AUTOMATIZATION);
-
+        company = companyService.getCompanyById(company3.getId());
         assertEquals(1, companies.size());
+        assertEquals(company,company3);
         assertTrue("There is no company with name " + company3.getName() + " stored", companies.contains(company3));
     }
 
@@ -79,6 +81,12 @@ public class CompanyServiceTest extends TestBase {
     public void testGetCompaniesByTypeFail() {
         List<Company> companies = companyService.getCompaniesByType(CompanyType.AUTOMATIZATION);
         assertEquals(0, companies.size());
+    }
+
+    @Test
+    public void testGetCompanies() {
+        List<Company> companies = companyService.getCompanies();
+        assertEquals(2, companies.size());
     }
 
     @Test

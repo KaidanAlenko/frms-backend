@@ -66,6 +66,19 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
+    public Company getCompanyById(Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException("Id not defined");
+        }
+
+        Company companyById = companyRepository.getCompany(id);
+        if (companyById == null) {
+            throw new CompanyNotFoundException();
+        }
+        return companyById;
+    }
+
+    @Override
     public List<Company> getCompaniesByType(CompanyType companyType) {
         if (companyType == null) {
             throw new IllegalArgumentException("Company type not defined");
@@ -77,5 +90,10 @@ public class CompanyServiceImpl implements CompanyService {
             throw new CompanyNotFoundException();
         }
         return allCompaniesByType;
+    }
+
+    @Override
+    public List<Company> getCompanies() {
+        return companyRepository.getCompanies();
     }
 }

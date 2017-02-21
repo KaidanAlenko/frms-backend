@@ -11,5 +11,7 @@ public interface CompanyService {
     void updateCompany(Company company);
     void deleteCompany(Long companyId);
     Company getCompanyByName(String name);
+    Company getCompanyById(Long id);
+    List<Company> getCompanies();
     List<Company> getCompaniesByType(CompanyType companyType);
 }
