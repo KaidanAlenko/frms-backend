@@ -4,8 +4,11 @@ import hr.eestec_zg.frmsbackend.domain.CompanyRepository;
 import hr.eestec_zg.frmsbackend.domain.EventRepository;
 import hr.eestec_zg.frmsbackend.domain.TaskRepository;
 import hr.eestec_zg.frmsbackend.domain.UserRepository;
-import hr.eestec_zg.frmsbackend.domain.models.*;
-
+import hr.eestec_zg.frmsbackend.domain.models.Company;
+import hr.eestec_zg.frmsbackend.domain.models.Event;
+import hr.eestec_zg.frmsbackend.domain.models.Task;
+import hr.eestec_zg.frmsbackend.domain.models.TaskStatus;
+import hr.eestec_zg.frmsbackend.domain.models.User;
 import hr.eestec_zg.frmsbackend.exceptions.CompanyNotFoundException;
 import hr.eestec_zg.frmsbackend.exceptions.EventNotFoundException;
 import hr.eestec_zg.frmsbackend.exceptions.TaskNotFoundException;
@@ -16,7 +19,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class TaskServiceImpl  implements TaskService{
+public class TaskServiceImpl implements TaskService {
 
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
@@ -25,7 +28,8 @@ public class TaskServiceImpl  implements TaskService{
 
 
     @Autowired
-    public TaskServiceImpl(TaskRepository taskRepository,UserRepository userRepository,CompanyRepository  companyRepository,EventRepository  eventRepository ) {
+    public TaskServiceImpl(TaskRepository taskRepository, UserRepository userRepository,
+                           CompanyRepository companyRepository, EventRepository eventRepository) {
         this.taskRepository = taskRepository;
         this.userRepository = userRepository;
         this.companyRepository = companyRepository;
@@ -33,15 +37,15 @@ public class TaskServiceImpl  implements TaskService{
     }
 
     @Override
-    public void createTask(Task task){
-        if (task == null){
+    public void createTask(Task task) {
+        if (task == null) {
             throw new IllegalArgumentException("Task not defined");
         }
         taskRepository.createTask(task);
     }
 
     @Override
-    public void updateTask(Task task){
+    public void updateTask(Task task) {
         if (task == null) {
             throw new IllegalArgumentException("Task not defined");
         }
@@ -51,7 +55,7 @@ public class TaskServiceImpl  implements TaskService{
     }
 
     @Override
-    public void deleteTask(Task task){
+    public void deleteTask(Task task) {
         if (task == null) {
             throw new IllegalArgumentException("Task not defined");
         }
@@ -59,7 +63,7 @@ public class TaskServiceImpl  implements TaskService{
     }
 
     @Override
-    public void assignToUser(Long userId, Task task){
+    public void assignToUser(Long userId, Task task) {
         if (userId == null) {
             throw new IllegalArgumentException("UserId not defined");
         }
@@ -68,11 +72,11 @@ public class TaskServiceImpl  implements TaskService{
             throw new UserNotFoundException();
         }
         task.setAssignee(user);
-       //
+        //
     }
 
     @Override
-    public Task getTask(Long id){
+    public Task getTask(Long id) {
         if (id == null) {
             throw new IllegalArgumentException("Id not defined");
         }
@@ -84,7 +88,7 @@ public class TaskServiceImpl  implements TaskService{
     }
 
     @Override
-    public List<Task> getTasksByAssignee(Long userId){
+    public List<Task> getTasksByAssignee(Long userId) {
         if (userId == null) {
             throw new IllegalArgumentException("UserId not defined");
         }
@@ -96,7 +100,7 @@ public class TaskServiceImpl  implements TaskService{
     }
 
     @Override
-    public List<Task> getTasksByEvent(Long eventId){
+    public List<Task> getTasksByEvent(Long eventId) {
         if (eventId == null) {
             throw new IllegalArgumentException("EventId not defined");
         }
@@ -108,7 +112,7 @@ public class TaskServiceImpl  implements TaskService{
     }
 
     @Override
-    public List<Task> getTasksByCompany(Long companyId){
+    public List<Task> getTasksByCompany(Long companyId) {
         if (companyId == null) {
             throw new IllegalArgumentException("CompanyId not defined");
         }
@@ -120,7 +124,7 @@ public class TaskServiceImpl  implements TaskService{
     }
 
     @Override
-    public List<Task> getTaskByStatus(TaskStatus status){
+    public List<Task> getTaskByStatus(TaskStatus status) {
         if (status == null) {
             throw new IllegalArgumentException("Status not defined");
         }
