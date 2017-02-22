@@ -1,7 +1,9 @@
 package hr.eestec_zg.frmsbackend;
 
 import hr.eestec_zg.frmsbackend.domain.models.Company;
+import hr.eestec_zg.frmsbackend.exceptions.CompanyNotFoundException;
 import hr.eestec_zg.frmsbackend.services.CompanyService;
+import hr.eestec_zg.frmsbackend.services.JacksonService;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -9,9 +11,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.web.util.NestedServletException;
+
+import java.util.List;
 
 import static hr.eestec_zg.frmsbackend.domain.models.CompanyType.COMPUTING;
 import static org.junit.Assert.assertEquals;
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.converter.json.Jackson2ObjectMapperBuilder.json;
 
 public class CompanyControllerTest extends TestBase {
 
@@ -44,6 +51,115 @@ public class CompanyControllerTest extends TestBase {
 
         assertEquals("span", c.getName());
         assertEquals("S", c.getShortName());
+        assertEquals(COMPUTING, c.getType());
+    }
+
+    @Test(expected = CompanyNotFoundException.class)
+    @WithMockUser
+    public void testReadSingleCompanyFail() throws Exception {
+        final String url = "/companies/" + 77777L;
+        logger.debug("Sending request on {}", url);
+
+        MockHttpServletResponse response = get(url);
+
+        logger.debug("Response: {}", response.getContentAsString());
+
+      //  assertEquals(200, response.getStatus());
+       // Company c = jacksonService.readJson(response.getContentAsString(), Company.class);
+
+       // assertEquals("span", c.getName());
+    }
+
+    @Test
+    @WithMockUser
+    public void testReadCompanies() throws Exception {
+        final String url = "/companies";
+        logger.debug("Sending request on {}", url);
+
+        MockHttpServletResponse response = get(url);
+
+        logger.debug("Response: {}", response.getContentAsString());
+
+        assertEquals(200, response.getStatus());
+        List<Company> c = jacksonService.readListOfObjects(response.getContentAsString(), Company.class);
+        assertEquals(2,c.size());
+        Company c2 = c.get(1);
+        assertEquals(company, c.get(0));
+        assertEquals("infobip", c2.getName());
+        assertEquals(COMPUTING, c2.getType());
+    }
+
+    @Test
+    @WithMockUser
+    public void testDeleteReadCompanies() throws Exception {
+        final String url = "/companies/"+company.getId();
+        logger.debug("Sending request on {}", url);
+
+        MockHttpServletResponse response = delete(url);
+
+        logger.debug("Response: {}", response.getContentAsString());
+
+        assertEquals(200, response.getStatus());
+
+        /* final String url2 = "/companies/"+company.getId();
+        logger.debug("Sending request on {}", url);
+
+         response = delete(url);
+
+        logger.debug("Response: {}", response.getContentAsString());
+
+
+       List<Company> c = jacksonService.readListOfObjects(response.getContentAsString(), Company.class);
+        assertEquals(2,c.size());
+        assertEquals(company, c.get(0));*/
+    }
+
+
+    @Test
+    @WithMockUser
+    public void testCreateReadCompany() throws Exception {
+        Company c2 = new Company("spanama", "SS", COMPUTING);
+        String url = "/companies";
+        String c2Json = jacksonService.asJson(c2);
+        logger.debug("Sending request on {}", url);
+
+        MockHttpServletResponse response = post(url,c2Json);
+
+        logger.debug("Response: {}", response.getContentAsString());
+
+        assertEquals(201, response.getStatus());
+
+        url = "/companies";
+        response = get(url);
+        List<Company> c = jacksonService.readListOfObjects(response.getContentAsString(), Company.class);
+        assertEquals(3,c.size());
+        Company c1 = c.get(2);
+
+        assertEquals("spanama", c1.getName());
+        assertEquals("SS", c1.getShortName());
+        assertEquals(COMPUTING, c1.getType());
+    }
+
+    @Test
+    @WithMockUser
+    public void testPutReadCompany() throws Exception {
+        Company c2 = new Company("spanama", "SS", COMPUTING);
+        String url = "/companies/"+company.getId();
+        String c2Json = jacksonService.asJson(c2);
+        logger.debug("Sending request on {}", url);
+
+        MockHttpServletResponse response = put(url,c2Json);
+
+        logger.debug("Response: {}", response.getContentAsString());
+
+        assertEquals(200, response.getStatus());
+
+        url = "/companies/"+c2.getId();
+        response = get(url);
+        Company c = jacksonService.readJson(response.getContentAsString(), Company.class);
+
+        assertEquals("spanama", c.getName());
+        assertEquals("SS", c.getShortName());
         assertEquals(COMPUTING, c.getType());
     }
 

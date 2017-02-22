@@ -1,6 +1,7 @@
 package hr.eestec_zg.frmsbackend.controllers;
 
 import hr.eestec_zg.frmsbackend.domain.models.Company;
+import hr.eestec_zg.frmsbackend.exceptions.CompanyNotFoundException;
 import hr.eestec_zg.frmsbackend.services.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,7 +27,10 @@ public class CompanyController {
         if (id == null) {
             throw new IllegalArgumentException("Id must not be null value");
         }
-        return companyService.getCompanyById(id);
+        Company company = companyService.getCompanyById(id);
+        if (company==null)
+            throw new CompanyNotFoundException();
+        return company;
     }
 
     @RequestMapping(value = "/companies", method = RequestMethod.GET)
@@ -38,7 +42,7 @@ public class CompanyController {
     @RequestMapping(value = "/companies/{id}", method = RequestMethod.DELETE)
     @ResponseStatus(value = HttpStatus.OK)
     public void deleteCompany(@PathVariable("id") Long id) {
-        if (id != null) {
+        if (id == null) {
             throw new IllegalArgumentException("Id must not be null value");
         }
         companyService.deleteCompany(id);
@@ -54,7 +58,7 @@ public class CompanyController {
     @RequestMapping(value = "/companies/{id}", method = RequestMethod.PUT)
     @ResponseStatus(value = HttpStatus.OK)
     public void putCompany(@PathVariable("id") Long id, @RequestBody Company company) {
-        if (id != null) {
+        if (id == null) {
             throw new IllegalArgumentException("Id must not be null value");
         }
         companyService.updateCompany(company);
