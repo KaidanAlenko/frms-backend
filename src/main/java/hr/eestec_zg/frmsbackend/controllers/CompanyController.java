@@ -1,7 +1,6 @@
 package hr.eestec_zg.frmsbackend.controllers;
 
 import hr.eestec_zg.frmsbackend.domain.models.Company;
-import hr.eestec_zg.frmsbackend.exceptions.CompanyNotFoundException;
 import hr.eestec_zg.frmsbackend.services.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,10 +26,7 @@ public class CompanyController {
         if (id == null) {
             throw new IllegalArgumentException("Id must not be null value");
         }
-        Company company = companyService.getCompanyById(id);
-        if (company==null)
-            throw new CompanyNotFoundException();
-        return company;
+        return companyService.getCompanyById(id);
     }
 
     @RequestMapping(value = "/companies", method = RequestMethod.GET)
