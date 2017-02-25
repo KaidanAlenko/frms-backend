@@ -63,7 +63,7 @@ public class CompanyServiceTest extends TestBase {
     @Test
     public void testUpdateCompany() {
         Company company3 = companyService.getCompanyByName("span");
-        company3.setAddress("asfasfas");
+        company3.setAddress("asfadsfas");
         companyService.updateCompany(company3);
 
         Company company4 = companyService.getCompanyByName("span");
