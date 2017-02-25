@@ -53,6 +53,13 @@ public class CompanyServiceTest extends TestBase {
         companyService.deleteCompany(company3.getId());
     }
 
+    @Test(expected = CompanyNotFoundException.class)
+    public void testCompanyNotFoundExceptionPut() {
+        Company company3 = new Company("spaasdasdadn", "S", COMPUTING);
+
+        companyService.updateCompany(company3);
+    }
+
     @Test
     public void testUpdateCompany() {
         Company company3 = companyService.getCompanyByName("span");
