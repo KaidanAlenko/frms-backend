@@ -69,7 +69,7 @@ public class CompanyServiceTest extends TestBase {
         Company company4 = companyService.getCompanyByName("span");
         String add = company4.getAddress();
         String shortn = company4.getShortName();
-        assertEquals(add, "asfasfas");
+        assertEquals(add, "asfadsfas");
         assertEquals(shortn, "S");
     }
 
