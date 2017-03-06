@@ -130,16 +130,19 @@ public class UserServiceTest extends TestBase {
 
     @Test(expected = UserNotFoundException.class)
     public void testDeleteUserFail(){
-        userService.deleteUser(6756755L);
+
+        userService.deleteUser(67586755L);
     }
 
     @Test(expected = UserNotFoundException.class)
     public void testUpdateUserFail(){
+
+        user1 = userService.getUserById(67586755L);
         user1.setFirstName("asdasd");
         userService.updateUser(user1);
     }
 
-    @Test
+    @Test(expected = UserNotFoundException.class)
     public void testDeleteUser(){
       userService.deleteUser(userService.getUserByEmail("email1").getId());
       assertEquals(null,userService.getUserByEmail("asdasdasdasd@haha").getEmail());
