@@ -101,4 +101,47 @@ public class UserServiceImpl implements UserService {
         }
         return userById;
     }
+
+    @Override
+    public void createUser(User user){
+        if(user == null) {
+            throw new IllegalArgumentException("User not defined");
+        }
+        userRepository.createUser(user);
+    }
+
+    @Override
+    public void updateUser(User user){
+        if(user == null) {
+            throw new IllegalArgumentException("User not defined");
+        }
+        userRepository.updateUser(user);
+    }
+
+    @Override
+    public void deleteUser(Long userId){
+        if(userId == null) {
+            throw new IllegalArgumentException("User not defined");
+        }
+        User user = userRepository.getUser(userId);
+        if (user == null) {
+            throw new UserNotFoundException();
+        }
+        userRepository.deleteUser(user);
+    }
+
+    @Override
+    public void changePassword(Long userId, String oldPassword, String newPassword){
+        if( userId == null || oldPassword == null || newPassword == null) {
+            throw new IllegalArgumentException();
+        }
+        User user = userRepository.getUser(userId);
+        if(user == null)
+            throw new UserNotFoundException();
+        if(user.getPassword()==oldPassword) {
+            user.setPassword(newPassword);
+            userRepository.updateUser(user);
+        }
+        else throw new UserNotFoundException();
+    }
 }
