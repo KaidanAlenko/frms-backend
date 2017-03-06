@@ -38,7 +38,7 @@ public class CompanyController {
     @RequestMapping(value = "/companies/{id}", method = RequestMethod.DELETE)
     @ResponseStatus(value = HttpStatus.OK)
     public void deleteCompany(@PathVariable("id") Long id) {
-        if (id != null) {
+        if (id == null) {
             throw new IllegalArgumentException("Id must not be null value");
         }
         companyService.deleteCompany(id);
@@ -54,7 +54,7 @@ public class CompanyController {
     @RequestMapping(value = "/companies/{id}", method = RequestMethod.PUT)
     @ResponseStatus(value = HttpStatus.OK)
     public void putCompany(@PathVariable("id") Long id, @RequestBody Company company) {
-        if (id != null) {
+        if (id == null) {
             throw new IllegalArgumentException("Id must not be null value");
         }
         companyService.updateCompany(company);

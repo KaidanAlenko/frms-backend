@@ -33,7 +33,9 @@ public class CompanyServiceImpl implements CompanyService {
         if (company == null) {
             throw new IllegalArgumentException("Company not defined");
         }
-
+        Company company1 = getCompanyById(company.getId());
+        if (company1==null)
+            throw new CompanyNotFoundException();
         companyRepository.updateCompany(company);
     }
 

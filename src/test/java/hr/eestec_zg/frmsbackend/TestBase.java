@@ -57,9 +57,24 @@ public abstract class TestBase {
                 .andReturn().getResponse();
     }
 
+    protected MockHttpServletResponse put(String url, String content) throws Exception {
+        return mvc.perform(MockMvcRequestBuilders
+                .put(url)
+                .content(content)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse();
+    }
+
     protected MockHttpServletResponse get(String url) throws Exception {
         return mvc.perform(MockMvcRequestBuilders
                 .get(url)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse();
+    }
+
+    protected MockHttpServletResponse delete(String url) throws Exception {
+        return mvc.perform(MockMvcRequestBuilders
+                .delete(url)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
     }
