@@ -112,9 +112,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUser(User user){
-        if(user == null) {
-            throw new IllegalArgumentException("User id is not defined");
+        if (user == null) {
+            throw new IllegalArgumentException("User not defined");
         }
+        User user1 = getUserById(user.getId());
+        if (user1 == null)
+            throw new UserNotFoundException();
         userRepository.updateUser(user);
     }
 
