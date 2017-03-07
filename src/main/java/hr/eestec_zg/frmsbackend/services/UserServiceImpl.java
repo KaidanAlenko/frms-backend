@@ -105,7 +105,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void createUser(User user){
         if(user == null) {
-            throw new IllegalArgumentException("User not defined");
+            throw new IllegalArgumentException("User id is not defined");
         }
         userRepository.createUser(user);
     }
@@ -113,7 +113,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUser(User user){
         if(user == null) {
-            throw new IllegalArgumentException("User not defined");
+            throw new IllegalArgumentException("User id is not defined");
         }
         userRepository.updateUser(user);
     }
@@ -121,7 +121,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(Long userId){
         if(userId == null) {
-            throw new IllegalArgumentException("User not defined");
+            throw new IllegalArgumentException("User id is not defined");
         }
         User user = userRepository.getUser(userId);
         if (user == null) {
@@ -133,15 +133,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public void changePassword(Long userId, String oldPassword, String newPassword){
         if( userId == null || oldPassword == null || newPassword == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Invalid input data");
         }
         User user = userRepository.getUser(userId);
         if(user == null)
             throw new UserNotFoundException();
-        if(user.getPassword()==oldPassword) {
+        if(user.getPassword().equals(oldPassword)) {
             user.setPassword(newPassword);
             userRepository.updateUser(user);
         }
-        else throw new UserNotFoundException();
+        else throw new InvalidPasswordException();
     }
 }
