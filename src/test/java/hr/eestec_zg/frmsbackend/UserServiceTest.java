@@ -1,6 +1,7 @@
 package hr.eestec_zg.frmsbackend;
 
 import hr.eestec_zg.frmsbackend.domain.models.*;
+import hr.eestec_zg.frmsbackend.exceptions.UserNotFoundException;
 import hr.eestec_zg.frmsbackend.services.UserService;
 import org.junit.Before;
 import org.junit.Test;
@@ -110,5 +111,48 @@ public class UserServiceTest extends TestBase {
         User userByEmail = userService.getUserByPhoneNumber("0001");
         assertTrue(user1.getPhoneNumber().equals(userByEmail.getPhoneNumber()));
 
+    }
+
+    @Test
+    public void testCreateUser(){
+        user1 = new User("Fafa", "Fufa", "em11aial1@ss", "pass1", "0001", Role.USER);
+        userService.createUser(user1);
+        assertEquals("em11aial1@ss",userService.getUserByEmail("em11aial1@ss").getEmail());
+    }
+
+    @Test
+    public void testUpdateUser(){
+     user1 = userService.getUserByEmail("email1");
+     user1.setEmail("asdasdasdasd@haha");
+     userService.updateUser(user1);
+     assertEquals("asdasdasdasd@haha",userService.getUserByEmail("asdasdasdasd@haha").getEmail());
+    }
+
+    @Test(expected = UserNotFoundException.class)
+    public void testDeleteUserFail(){
+
+        userService.deleteUser(67586755L);
+    }
+
+    @Test(expected = UserNotFoundException.class)
+    public void testUpdateUserFail(){
+
+        user1 = userService.getUserById(67586755L);
+        user1.setFirstName("asdasd");
+        userService.updateUser(user1);
+    }
+
+    @Test(expected = UserNotFoundException.class)
+    public void testDeleteUser(){
+      userService.deleteUser(userService.getUserByEmail("email1").getId());
+      assertEquals(null,userService.getUserByEmail("asdasdasdasd@haha").getEmail());
+    }
+
+    @Test
+    public void testChangePassUser(){
+        user1 = userService.getUserByEmail("email1");
+        userService.changePassword(user1.getId(),"pass1","blabla");
+        user2 = userService.getUserByEmail("email1");
+        assertEquals("blabla",user2.getPassword());
     }
 }
