@@ -46,14 +46,14 @@ public class UserController {
 
     @RequestMapping(value = "/users", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
-    public User postUser(@RequestBody User user) {
+    public User createUser(@RequestBody User user) {
         userService.createUser(user);
         return user;
     }
 
     @RequestMapping(value = "/users/{id}", method = RequestMethod.PUT)
     @ResponseStatus(value = HttpStatus.OK)
-    public void putUser(@PathVariable("id") Long id, @RequestBody User user) {
+    public void updateUser(@PathVariable("id") Long id, @RequestBody User user) {
         if (id == null) {
             throw new IllegalArgumentException("Id must not be null value");
         }

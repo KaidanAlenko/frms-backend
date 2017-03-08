@@ -46,14 +46,14 @@ public class CompanyController {
 
     @RequestMapping(value = "/companies", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
-    public Company postCompany(@RequestBody Company company) {
+    public Company createCompany(@RequestBody Company company) {
         companyService.createCompany(company);
         return company;
     }
 
     @RequestMapping(value = "/companies/{id}", method = RequestMethod.PUT)
     @ResponseStatus(value = HttpStatus.OK)
-    public void putCompany(@PathVariable("id") Long id, @RequestBody Company company) {
+    public void updateCompany(@PathVariable("id") Long id, @RequestBody Company company) {
         if (id == null) {
             throw new IllegalArgumentException("Id must not be null value");
         }
