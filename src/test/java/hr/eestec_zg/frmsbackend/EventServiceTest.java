@@ -39,7 +39,7 @@ public class EventServiceTest extends TestBase {
     @Test
     public void testGetEventById() {
         Event event3 = eventService.getEventById(event.getId());
-        assertEquals(event3, event);
+        assertEquals(event, event3);
     }
 
     @Test(expected = EventNotFoundException.class)
@@ -74,8 +74,8 @@ public class EventServiceTest extends TestBase {
         Event event4 = eventService.getEventByName("span");
         String year = event4.getYear();
         String shortName = event4.getShortName();
-        assertEquals(year, "2017");
-        assertEquals(shortName, "bla");
+        assertEquals("2017", year);
+        assertEquals("bla", shortName);
     }
 
     @Test
@@ -87,7 +87,7 @@ public class EventServiceTest extends TestBase {
         event = eventService.getEventById(event3.getId());
 
         assertEquals(1, events.size());
-        assertEquals(event,event3);
+        assertEquals(event3, event);
         assertTrue("There is no event with name " + event3.getName() + " stored", events.contains(event3));
     }
 
