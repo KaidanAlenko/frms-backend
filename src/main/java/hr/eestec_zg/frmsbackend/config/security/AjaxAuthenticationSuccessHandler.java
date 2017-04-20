@@ -3,6 +3,7 @@ package hr.eestec_zg.frmsbackend.config.security;
 import hr.eestec_zg.frmsbackend.domain.models.User;
 import hr.eestec_zg.frmsbackend.services.JacksonService;
 import hr.eestec_zg.frmsbackend.services.UserService;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -28,6 +29,7 @@ public class AjaxAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuc
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
         response.setStatus(HttpServletResponse.SC_OK);
+        response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
 
         authentication = SecurityContextHolder.getContext().getAuthentication();
         User loggedUser = userService.getUserByEmail(authentication.getName());
