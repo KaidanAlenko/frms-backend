@@ -1,6 +1,6 @@
 package hr.eestec_zg.frmsbackend.config.security;
 
-import hr.eestec_zg.frmsbackend.domain.models.User;
+import hr.eestec_zg.frmscore.domain.models.User;
 
 public class UserDetails {
     private long id;

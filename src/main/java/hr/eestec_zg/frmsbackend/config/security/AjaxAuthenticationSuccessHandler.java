@@ -1,8 +1,8 @@
 package hr.eestec_zg.frmsbackend.config.security;
 
-import hr.eestec_zg.frmsbackend.domain.models.User;
-import hr.eestec_zg.frmsbackend.services.JacksonService;
-import hr.eestec_zg.frmsbackend.services.UserService;
+import hr.eestec_zg.frmscore.domain.models.User;
+import hr.eestec_zg.frmscore.services.JacksonService;
+import hr.eestec_zg.frmscore.services.UserService;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

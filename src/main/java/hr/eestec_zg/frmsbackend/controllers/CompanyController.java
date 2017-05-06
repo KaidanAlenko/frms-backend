@@ -1,7 +1,7 @@
 package hr.eestec_zg.frmsbackend.controllers;
 
-import hr.eestec_zg.frmsbackend.domain.models.Company;
-import hr.eestec_zg.frmsbackend.services.CompanyService;
+import hr.eestec_zg.frmscore.domain.models.Company;
+import hr.eestec_zg.frmscore.services.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;

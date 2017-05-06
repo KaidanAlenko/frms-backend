@@ -1,11 +1,11 @@
 package hr.eestec_zg.frmsbackend;
 
 import config.TestAppConfig;
-import hr.eestec_zg.frmsbackend.domain.CompanyRepository;
-import hr.eestec_zg.frmsbackend.domain.EventRepository;
-import hr.eestec_zg.frmsbackend.domain.TaskRepository;
-import hr.eestec_zg.frmsbackend.domain.UserRepository;
-import hr.eestec_zg.frmsbackend.services.JacksonService;
+import hr.eestec_zg.frmscore.domain.CompanyRepository;
+import hr.eestec_zg.frmscore.domain.EventRepository;
+import hr.eestec_zg.frmscore.domain.TaskRepository;
+import hr.eestec_zg.frmscore.domain.UserRepository;
+import hr.eestec_zg.frmscore.services.JacksonService;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

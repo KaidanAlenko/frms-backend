@@ -1,9 +1,9 @@
 package hr.eestec_zg.frmsbackend.controllers;
 
-import hr.eestec_zg.frmsbackend.exceptions.CompanyNotFoundException;
-import hr.eestec_zg.frmsbackend.exceptions.EventNotFoundException;
-import hr.eestec_zg.frmsbackend.exceptions.TaskNotFoundException;
-import hr.eestec_zg.frmsbackend.exceptions.UserNotFoundException;
+import hr.eestec_zg.frmscore.exceptions.CompanyNotFoundException;
+import hr.eestec_zg.frmscore.exceptions.EventNotFoundException;
+import hr.eestec_zg.frmscore.exceptions.TaskNotFoundException;
+import hr.eestec_zg.frmscore.exceptions.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
