@@ -1,19 +1,19 @@
 package hr.eestec_zg.frmsbackend;
 
+import hr.eestec_zg.frmsbackend.domain.models.Company;
+import hr.eestec_zg.frmsbackend.domain.models.CompanyType;
 import hr.eestec_zg.frmsbackend.domain.models.Event;
 import hr.eestec_zg.frmsbackend.domain.models.Role;
+import hr.eestec_zg.frmsbackend.domain.models.SponsorshipType;
 import hr.eestec_zg.frmsbackend.domain.models.Task;
+import hr.eestec_zg.frmsbackend.domain.models.TaskStatus;
 import hr.eestec_zg.frmsbackend.domain.models.User;
-import hr.eestec_zg.frmsbackend.services.EventService;
-import hr.eestec_zg.frmsbackend.services.TaskService;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.test.context.support.WithMockUser;
-
 
 import java.util.List;
 
@@ -24,27 +24,25 @@ public class EventControllerTest extends TestBase {
 
     private static final Logger logger = LoggerFactory.getLogger(EventControllerTest.class);
 
-    @Autowired
-    private EventService eventService;
-    @Autowired
-    private TaskService taskService;
     private Event event;
     private Task task;
     private User user;
+    private Company company;
 
     @Before
     public void setTestData() {
         event = new Event("span", "S", "2017");
         Event event2 = new Event("CroApps", "CA", "2016");
-        eventService.createEvent(event);
-        eventService.createEvent(event2);
+        eventRepository.createEvent(event);
+        eventRepository.createEvent(event2);
 
         user = new User("Frane", "Varalica", "frane@fer.hr", "frane", "1234", Role.USER);
+        userRepository.createUser(user);
+        company = new Company("Infobip", "IB", CompanyType.COMPUTING);
+        companyRepository.createCompany(company);
+        task = new Task(event, company, user, SponsorshipType.MATERIAL, null, null, null, TaskStatus.IN_PROGRESS, "");
 
-        task = new Task();
-        task.setEvent(event);
-        task.setAssignee(user);
-        taskService.createTask(task);
+        taskRepository.createTask(task);
 
     }
 
@@ -102,7 +100,7 @@ public class EventControllerTest extends TestBase {
     @Test
     @WithMockUser
     public void testDeleteReadEvents() throws Exception {
-        long  eventId = eventService.getEventByName("span").getId();
+        long  eventId = eventRepository.getEventByName("span").getId();
         String url = "/events/" + eventId;
         logger.debug("Sending request on {}", url);
         MockHttpServletResponse response = get(url);
@@ -135,9 +133,7 @@ public class EventControllerTest extends TestBase {
 
         assertEquals(201, response.getStatus());
 
-        url = "/events";
-        response = get(url);
-        List<Event> c = jacksonService.readListOfObjects(response.getContentAsString(), Event.class);
+        List<Event> c = eventRepository.getEvents();
         assertEquals(3, c.size());
         Event c1 = c.get(2);
 
@@ -149,7 +145,7 @@ public class EventControllerTest extends TestBase {
     @Test
     @WithMockUser
     public void testPutReadEvent() throws Exception {
-        Event c1 = eventService.getEventByName("span");
+        Event c1 = eventRepository.getEventByName("span");
 
         String url = "/events/" + c1.getId();
         logger.debug("Sending GET request on {}", url);
@@ -167,7 +163,7 @@ public class EventControllerTest extends TestBase {
         logger.debug("Response: {}", response.getContentAsString());
         assertEquals(200, response.getStatus());
 
-        c1 = eventService.getEventByName("spanama");
+        c1 = eventRepository.getEventByName("spanama");
         logger.debug("Sending GET request on {}", url);
         url = "/events/" + c1.getId();
         response = get(url);

@@ -14,7 +14,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 public class EventController {
@@ -83,20 +86,25 @@ public class EventController {
 
     @RequestMapping(value = "/events/{id}/users", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
-    public List<User> getUsersByEvent(@PathVariable("id") Long id) {
+    public Set<User> getUsersByEvent(@PathVariable("id") Long id) {
         if (id == null) {
             throw new IllegalArgumentException("Id must not be null value");
         }
 
-        List<User> users = null;
+        Set<User> users = new HashSet<>();
         List<Task> tasks = taskService.getTasksByEvent(id);
 
+        tasks.stream()
+                .filter(task -> task.getAssignee() != null)
+                .forEach(filteredTask -> users.add(filteredTask.getAssignee()));
+
+/* ovo gore je isto ovom zakomentiranom
         for (Task task: tasks) {
-            if (!users.contains(task.getAssignee())) {
+            if (task.getAssignee() != null){
                 users.add(task.getAssignee());
             }
         }
-
+*/
         return users;
     }
 }
