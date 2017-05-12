@@ -5,11 +5,12 @@ import hr.eestec_zg.frmsbackend.domain.models.Task;
 import hr.eestec_zg.frmsbackend.domain.models.TaskStatus;
 import hr.eestec_zg.frmsbackend.domain.models.User;
 import hr.eestec_zg.frmsbackend.domain.models.Company;
+import hr.eestec_zg.frmsbackend.domain.models.dto.TaskDto;
 
 import java.util.List;
 
 public interface TaskService {
-    void createTask(Task task);
+    void createTask(TaskDto task);
     void updateTask(Task task);
     void deleteTask(Task task);
     void assignToUser(Long userId, Task task);

@@ -4,6 +4,7 @@ import java.util.List;
 
 import hr.eestec_zg.frmsbackend.domain.models.Task;
 import hr.eestec_zg.frmsbackend.domain.models.TaskStatus;
+import hr.eestec_zg.frmsbackend.domain.models.dto.TaskDto;
 import hr.eestec_zg.frmsbackend.services.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,7 +30,7 @@ public class TaskController {
 
     @RequestMapping(method= RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.OK)
-    public Task createTask(@RequestBody Task task){
+    public TaskDto createTask(@RequestBody TaskDto task){
         taskService.createTask(task);
         return task;
     }

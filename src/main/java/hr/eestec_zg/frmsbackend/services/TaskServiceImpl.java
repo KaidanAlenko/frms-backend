@@ -9,6 +9,7 @@ import hr.eestec_zg.frmsbackend.domain.models.Event;
 import hr.eestec_zg.frmsbackend.domain.models.Task;
 import hr.eestec_zg.frmsbackend.domain.models.TaskStatus;
 import hr.eestec_zg.frmsbackend.domain.models.User;
+import hr.eestec_zg.frmsbackend.domain.models.dto.TaskDto;
 import hr.eestec_zg.frmsbackend.exceptions.CompanyNotFoundException;
 import hr.eestec_zg.frmsbackend.exceptions.EventNotFoundException;
 import hr.eestec_zg.frmsbackend.exceptions.TaskNotFoundException;
@@ -37,11 +38,16 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public void createTask(Task task) {
+    public void createTask(TaskDto task) {
         if (task == null) {
             throw new IllegalArgumentException("Task not defined");
         }
-        taskRepository.createTask(task);
+        User user=userRepository.getUser(task.getUserId());
+        Company company=companyRepository.getCompany(task.getCompanyId());
+        Event event=eventRepository.getEvent(task.getEventId());
+
+        Task taskT=new Task(event,company,user,task.getType(),task.getCallTime(),task.getMailTime(),task.getFollowUpTime(),task.getStatus(),task.getNotes());
+        taskRepository.createTask(taskT);
     }
 
     @Override

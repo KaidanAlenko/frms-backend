@@ -1,6 +1,7 @@
 package hr.eestec_zg.frmsbackend;
 
 import hr.eestec_zg.frmsbackend.domain.models.*;
+import hr.eestec_zg.frmsbackend.domain.models.dto.TaskDto;
 import hr.eestec_zg.frmsbackend.services.TaskService;
 import hr.eestec_zg.frmsbackend.exceptions.*;
 
@@ -43,7 +44,7 @@ public class TaskServiceTest extends TestBase{
     public void testCreateTask(){
         user2 = new User("Fico", "Ls", "emaail1", "psass1", "0001", Role.USER);
         userRepository.createUser(user2);
-        Task task = new Task(event, company, user2, SponsorshipType.FINANCIAL, null, null, null, TaskStatus.IN_PROGRESS, "");
+        TaskDto task = new TaskDto(event.getId(), company.getId(), user2.getId(), SponsorshipType.FINANCIAL, null, null, null, TaskStatus.IN_PROGRESS, "");
         taskService.createTask(task);
         List<Task> tasks = taskService.getTasksByCompany(company.getId());
         assertTrue(tasks.size() == 2 && tasks.contains(task));
@@ -53,7 +54,7 @@ public class TaskServiceTest extends TestBase{
     public void testCreateDeleteTask(){
         user2 = new User("Ficasdo", "Lfs", "emagail1", "psagss1", "0001", Role.USER);
         userRepository.createUser(user2);
-        Task task = new Task(event, company, user2, SponsorshipType.MATERIAL, null, null, null, TaskStatus.IN_PROGRESS, "");
+        TaskDto task = new TaskDto(event.getId(), company.getId(), user2.getId(), SponsorshipType.MATERIAL, null, null, null, TaskStatus.IN_PROGRESS, "");
         taskService.createTask(task);
         taskService.deleteTask(t1);
         List<Task> tasks = taskService.getTasksByCompany(company.getId());

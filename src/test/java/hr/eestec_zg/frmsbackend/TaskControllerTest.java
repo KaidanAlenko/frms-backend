@@ -8,6 +8,7 @@ import hr.eestec_zg.frmsbackend.domain.models.SponsorshipType;
 import hr.eestec_zg.frmsbackend.domain.models.Task;
 import hr.eestec_zg.frmsbackend.domain.models.TaskStatus;
 import hr.eestec_zg.frmsbackend.domain.models.User;
+import hr.eestec_zg.frmsbackend.domain.models.dto.TaskDto;
 import hr.eestec_zg.frmsbackend.services.TaskService;
 
 import org.junit.Before;
@@ -51,12 +52,12 @@ public class TaskControllerTest extends TestBase {
         eventRepository.createEvent(event3);
         userRepository.createUser(user);
 
-        task = new Task(event, company, user, SponsorshipType.MATERIAL, null, null, null, TaskStatus.IN_PROGRESS, "");
-        taskService.createTask(task);
-        task2 = new Task(event2, company, user, SponsorshipType.MATERIAL, null, null, null, TaskStatus.IN_PROGRESS, "");
-        taskService.createTask(task2);
-        task3 = new Task(event3, company2, user, SponsorshipType.MATERIAL, null, null, null, TaskStatus.ACCEPTED, "");
-        taskService.createTask(task3);
+        task = new Task(event,company,user,SponsorshipType.MATERIAL, null, null, null, TaskStatus.IN_PROGRESS, "");
+        taskRepository.createTask(task);
+        task2 = new Task(event,company,user, SponsorshipType.MATERIAL, null, null, null, TaskStatus.IN_PROGRESS, "");
+        taskRepository.createTask(task2);
+        task3 = new Task(event,company,user, SponsorshipType.MATERIAL, null, null, null, TaskStatus.ACCEPTED, "");
+        taskRepository.createTask(task3);
     }
 
     @Test
@@ -69,6 +70,7 @@ public class TaskControllerTest extends TestBase {
         logger.debug("Response: {}", response.getContentAsString());
         assertEquals(200, response.getStatus());
 
+        //List<Task> tasks = taskRepository.getTasks();
         List<Task> tasks = jacksonService.readListOfObjects(response.getContentAsString(), Task.class);
         assertEquals(2, tasks.size());
         for(int i=0;i<tasks.size();i++){
@@ -84,10 +86,11 @@ public class TaskControllerTest extends TestBase {
         logger.debug("Sending request on {}", url);
         MockHttpServletResponse response = get(url);
         logger.debug("Response: {}", response.getContentAsString());
+        //response 404??
         assertEquals(200, response.getStatus());
 
         Task t1 = jacksonService.readJson(response.getContentAsString(), Task.class);
-        assertEquals(task.getEvent(),t1.getEvent());
+        assertEquals(task.getId(),t1.getId());
     }
 
     @Test
@@ -114,12 +117,13 @@ public class TaskControllerTest extends TestBase {
         logger.debug("Response: {}", response.getContentAsString());
         assertEquals(200,response.getStatus());
 
-        url = "/tasks";
-        //logger.debug("Sending request on {}", url);
-        response = get(url);
-        List<Task> tasks = jacksonService.readListOfObjects(response.getContentAsString(), Task.class);
-        //logger.debug("Response: {}", response.getContentAsString());
-        assertEquals(4,tasks.size());
+        assertEquals(task4,taskRepository.getTask(task4.getId()));
+//        url = "/tasks";
+//        //logger.debug("Sending request on {}", url);
+//        response = get(url);
+//        List<Task> tasks = jacksonService.readListOfObjects(response.getContentAsString(), Task.class);
+//        //logger.debug("Response: {}", response.getContentAsString());
+
 
     }
 
@@ -153,7 +157,7 @@ public class TaskControllerTest extends TestBase {
         //post updated task
         String c2Json = jacksonService.asJson(t1);
         logger.debug("Sending request on {}", url);
-        response = post(url, c2Json);
+        response = put(url, c2Json);
         logger.debug("Response: {}", response.getContentAsString());
         assertEquals(200, response.getStatus());
 
@@ -164,8 +168,8 @@ public class TaskControllerTest extends TestBase {
         logger.debug("Response: {}", response.getContentAsString());
         assertEquals(200, response.getStatus());
 
-        t1 = jacksonService.readJson(response.getContentAsString(), Task.class);
-        assertEquals(company2,t1.getCompany());
+        //t1 = jacksonService.readJson(response.getContentAsString(), Task.class);
+        assertEquals(company2,taskRepository.getTask(t1.getId()).getCompany());
 
 
     }
@@ -184,6 +188,7 @@ public class TaskControllerTest extends TestBase {
     @Test
     @WithMockUser
     public void testDeleteTask() throws Exception{
+        int startingSize=taskRepository.getTasks().size();
         String url = "/tasks/" + task.getId();
         logger.debug("Sending request on {}", url);
         MockHttpServletResponse response = get(url);
@@ -195,10 +200,12 @@ public class TaskControllerTest extends TestBase {
         logger.debug("Response: {}", response.getContentAsString());
         assertEquals(200, response.getStatus());
 
-        logger.debug("Sending request on {}", url);
-        response = get(url);
-        logger.debug("Response: {}", response.getContentAsString());
-        assertEquals(404, response.getStatus());
+        //Task t=taskRepository.getTask(task.getId());
+        assertEquals(startingSize-1, taskRepository.getTasks().size());
+//        logger.debug("Sending request on {}", url);
+//        response = get(url);
+//        logger.debug("Response: {}", response.getContentAsString());
+
     }
 
     @Test
