@@ -1,43 +1,20 @@
 package hr.eestec_zg.frmsbackend.domain.models.dto;
 
-import hr.eestec_zg.frmsbackend.domain.models.Company;
-import hr.eestec_zg.frmsbackend.domain.models.Event;
 import hr.eestec_zg.frmsbackend.domain.models.SponsorshipType;
 import hr.eestec_zg.frmsbackend.domain.models.TaskStatus;
-import hr.eestec_zg.frmsbackend.domain.models.User;
 
-import javax.persistence.Column;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import java.time.ZonedDateTime;
 
 public class TaskDto {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @ManyToOne
     private long eventId;
-    @ManyToOne
     private long companyId;
-    @ManyToOne
     private long userId;
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private SponsorshipType type;
-    @Column
     private ZonedDateTime callTime;
-    @Column
     private ZonedDateTime mailTime;
-    @Column
     private ZonedDateTime followUpTime;
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
     private TaskStatus status;
-    @Column
     private String notes;
 
     public TaskDto() {}

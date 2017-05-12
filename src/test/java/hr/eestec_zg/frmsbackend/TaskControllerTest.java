@@ -107,7 +107,7 @@ public class TaskControllerTest extends TestBase {
     @Test
     @WithMockUser
     public void testCreateNewTask() throws Exception{
-        Task task4 = new Task(event, company2, user, SponsorshipType.MATERIAL, null, null, null, TaskStatus.IN_PROGRESS, "");
+        TaskDto task4 = new TaskDto(event.getId(), company2.getId(), user.getId(), SponsorshipType.MATERIAL, null, null, null, TaskStatus.IN_PROGRESS, "");
 
         String url = "/tasks";
         String c2Json = jacksonService.asJson(task4);
@@ -115,29 +115,26 @@ public class TaskControllerTest extends TestBase {
         logger.debug("Sending request on {}", url);
         MockHttpServletResponse response = post(url, c2Json);
         logger.debug("Response: {}", response.getContentAsString());
-        assertEquals(200,response.getStatus());
+        assertEquals(201,response.getStatus());
 
-        assertEquals(task4,taskRepository.getTask(task4.getId()));
-//        url = "/tasks";
-//        //logger.debug("Sending request on {}", url);
-//        response = get(url);
-//        List<Task> tasks = jacksonService.readListOfObjects(response.getContentAsString(), Task.class);
-//        //logger.debug("Response: {}", response.getContentAsString());
+        Task returnedTask = jacksonService.readJson(response.getContentAsString(), Task.class);
 
+        assertEquals(returnedTask.getEvent().getId(),task4.getEventId());
+        assertEquals(returnedTask.getCompany().getId(),task4.getCompanyId());
 
     }
 
     @Test
     @WithMockUser
     public void testCreateNewTaskFail() throws Exception{
-        Task temp_t = new Task(event, company2, user, SponsorshipType.MATERIAL, null, null, null, TaskStatus.IN_PROGRESS, "");
+        TaskDto temp_t = new TaskDto(event.getId(), null, user.getId(), SponsorshipType.MATERIAL, null, null, null, TaskStatus.IN_PROGRESS, "");
         String url = "/tasks";
         String c2Json = jacksonService.asJson(temp_t);
 
         logger.debug("Sending request on {}", url);
         MockHttpServletResponse response = post(url, c2Json);
         logger.debug("Response: {}", response.getContentAsString());
-        assertEquals(404,response.getStatus());
+        assertEquals(400,response.getStatus());
     }
 
     @Test
@@ -169,7 +166,7 @@ public class TaskControllerTest extends TestBase {
         assertEquals(200, response.getStatus());
 
         //t1 = jacksonService.readJson(response.getContentAsString(), Task.class);
-        assertEquals(company2,taskRepository.getTask(t1.getId()).getCompany());
+        assertEquals(company2,taskRepository.getTask(task.getId()).getCompany());
 
 
     }

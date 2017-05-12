@@ -38,16 +38,23 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public void createTask(TaskDto task) {
+    public Task createTask(TaskDto task) {
         if (task == null) {
             throw new IllegalArgumentException("Task not defined");
         }
-        User user=userRepository.getUser(task.getUserId());
-        Company company=companyRepository.getCompany(task.getCompanyId());
-        Event event=eventRepository.getEvent(task.getEventId());
+        User user = userRepository.getUser(task.getUserId());
+        Company company = companyRepository.getCompany(task.getCompanyId());
+        if(company==null){
+            throw new IllegalArgumentException("Company does not exist");
+        }
+        Event event = eventRepository.getEvent(task.getEventId());
+        if (event==null){
+            throw new IllegalArgumentException("Event does not exist");
+        }
 
-        Task taskT=new Task(event,company,user,task.getType(),task.getCallTime(),task.getMailTime(),task.getFollowUpTime(),task.getStatus(),task.getNotes());
+        Task taskT = new Task(event, company, user, task.getType(), task.getCallTime(), task.getMailTime(), task.getFollowUpTime(), task.getStatus(), task.getNotes());
         taskRepository.createTask(taskT);
+        return taskT;
     }
 
     @Override

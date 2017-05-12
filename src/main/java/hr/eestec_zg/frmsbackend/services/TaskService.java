@@ -10,7 +10,7 @@ import hr.eestec_zg.frmsbackend.domain.models.dto.TaskDto;
 import java.util.List;
 
 public interface TaskService {
-    void createTask(TaskDto task);
+    Task createTask(TaskDto task);
     void updateTask(Task task);
     void deleteTask(Task task);
     void assignToUser(Long userId, Task task);

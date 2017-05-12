@@ -29,10 +29,9 @@ public class TaskController {
     }
 
     @RequestMapping(method= RequestMethod.POST)
-    @ResponseStatus(value = HttpStatus.OK)
-    public TaskDto createTask(@RequestBody TaskDto task){
-        taskService.createTask(task);
-        return task;
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public Task createTask(@RequestBody TaskDto task){
+        return taskService.createTask(task);
     }
 
     @RequestMapping(value="{id}", method = RequestMethod.GET)
@@ -42,8 +41,9 @@ public class TaskController {
     }
 
     @RequestMapping(value="{id}", method = RequestMethod.PUT)
-    @ResponseStatus(value= HttpStatus.CREATED)
+    @ResponseStatus(value= HttpStatus.OK)
     public void updateTask(@RequestBody Task task){
+
         taskService.updateTask(task);
     }
 
