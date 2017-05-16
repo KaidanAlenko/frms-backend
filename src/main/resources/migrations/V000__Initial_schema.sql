@@ -89,9 +89,9 @@ CREATE TABLE task (
   status         VARCHAR(20) DEFAULT 'IN_PROGRESS',
   notes          TEXT        DEFAULT NULL,
   CONSTRAINT pk_task PRIMARY KEY (id),
-  CONSTRAINT fk_task_event_id FOREIGN KEY (event_id) REFERENCES event (id),
-  CONSTRAINT fk_task_company_id FOREIGN KEY (company_id) REFERENCES company (id),
-  CONSTRAINT fk_task_assignee FOREIGN KEY (assignee_id) REFERENCES users (id)
+  CONSTRAINT fk_task_event_id FOREIGN KEY (event_id) REFERENCES event (id) ON DELETE CASCADE,
+  CONSTRAINT fk_task_company_id FOREIGN KEY (company_id) REFERENCES company (id) ON DELETE CASCADE,
+  CONSTRAINT fk_task_assignee FOREIGN KEY (assignee_id) REFERENCES users (id) ON DELETE CASCADE
 );
 
 CREATE INDEX idx_call_mail_follow_up_time

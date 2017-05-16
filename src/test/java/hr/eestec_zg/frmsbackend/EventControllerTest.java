@@ -8,6 +8,7 @@ import hr.eestec_zg.frmsbackend.domain.models.SponsorshipType;
 import hr.eestec_zg.frmsbackend.domain.models.Task;
 import hr.eestec_zg.frmsbackend.domain.models.TaskStatus;
 import hr.eestec_zg.frmsbackend.domain.models.User;
+import hr.eestec_zg.frmsbackend.exceptions.EventNotFoundException;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -18,6 +19,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 
 public class EventControllerTest extends TestBase {
@@ -25,9 +27,6 @@ public class EventControllerTest extends TestBase {
     private static final Logger logger = LoggerFactory.getLogger(EventControllerTest.class);
 
     private Event event;
-    private Task task;
-    private User user;
-    private Company company;
 
     @Before
     public void setTestData() {
@@ -36,11 +35,11 @@ public class EventControllerTest extends TestBase {
         eventRepository.createEvent(event);
         eventRepository.createEvent(event2);
 
-        user = new User("Frane", "Varalica", "frane@fer.hr", "frane", "1234", Role.USER);
+        User user = new User("Frane", "Varalica", "frane@fer.hr", "frane", "1234", Role.USER);
         userRepository.createUser(user);
-        company = new Company("Infobip", "IB", CompanyType.COMPUTING);
+        Company company = new Company("Infobip", "IB", CompanyType.COMPUTING);
         companyRepository.createCompany(company);
-        task = new Task(event, company, user, SponsorshipType.MATERIAL, null, null, null, TaskStatus.IN_PROGRESS, "");
+        Task task = new Task(event, company, user, SponsorshipType.MATERIAL, null, null, null, TaskStatus.IN_PROGRESS, "");
 
         taskRepository.createTask(task);
 
@@ -90,6 +89,7 @@ public class EventControllerTest extends TestBase {
         assertEquals(200, response.getStatus());
         List<Event> c = jacksonService.readListOfObjects(response.getContentAsString(), Event.class);
         assertEquals(2, c.size());
+
         Event c2 = c.get(1);
         assertEquals(event, c.get(0));
         assertEquals("CroApps", c2.getName());
@@ -99,29 +99,33 @@ public class EventControllerTest extends TestBase {
 
     @Test
     @WithMockUser
-    public void testDeleteReadEvents() throws Exception {
-        long  eventId = eventRepository.getEventByName("span").getId();
-        String url = "/events/" + eventId;
+    public void testDeleteEvent() throws Exception {
+        Event event1 = eventRepository.getEventByName("span");
+        String url = "/events/" + event1.getId();
+
         logger.debug("Sending request on {}", url);
-        MockHttpServletResponse response = get(url);
+        MockHttpServletResponse response = delete(url);
         logger.debug("Response: {}", response.getContentAsString());
         assertEquals(200, response.getStatus());
 
-        logger.debug("Sending request on {}", url);
-        response = delete(url);
-        logger.debug("Response: {}", response.getContentAsString());
-        assertEquals(200, response.getStatus());
+        Event event2 = eventRepository.getEventByName("span");
+        assertNull(event2);
+    }
+
+    @Test
+    @WithMockUser
+    public void testDeleteEventFail() throws Exception {
+        String url = "/events/" + "727753";
 
         logger.debug("Sending request on {}", url);
-        response = get(url);
+        MockHttpServletResponse response = delete(url);
         logger.debug("Response: {}", response.getContentAsString());
         assertEquals(404, response.getStatus());
     }
 
-
     @Test
     @WithMockUser
-    public void testCreateReadEvent() throws Exception {
+    public void testCreateReadEvents() throws Exception {
         Event c2 = new Event("spanama", "SS", "2001");
         String url = "/events";
         String c2Json = jacksonService.asJson(c2);
@@ -147,32 +151,22 @@ public class EventControllerTest extends TestBase {
     public void testPutReadEvent() throws Exception {
         Event c1 = eventRepository.getEventByName("span");
 
-        String url = "/events/" + c1.getId();
-        logger.debug("Sending GET request on {}", url);
-        MockHttpServletResponse response = get(url);
-        logger.debug("Response: {}", response.getContentAsString());
-        assertEquals(200, response.getStatus());
-
         c1.setName("spanama");
         c1.setShortName("SS");
 
+        String url = "/events/" + c1.getId();
         String c2Json = jacksonService.asJson(c1);
 
         logger.debug("Sending PUT request on {}", url);
-        response = put(url, c2Json);
+        MockHttpServletResponse response = put(url, c2Json);
         logger.debug("Response: {}", response.getContentAsString());
         assertEquals(200, response.getStatus());
 
         c1 = eventRepository.getEventByName("spanama");
-        logger.debug("Sending GET request on {}", url);
-        url = "/events/" + c1.getId();
-        response = get(url);
-        logger.debug("Response: {}", response.getContentAsString());
-        Event c = jacksonService.readJson(response.getContentAsString(), Event.class);
 
-        assertEquals("spanama", c.getName());
-        assertEquals("SS", c.getShortName());
-        assertEquals("2017", c.getYear());
+        assertEquals("spanama", c1.getName());
+        assertEquals("SS", c1.getShortName());
+        assertEquals("2017", c1.getYear());
     }
 
     @Test
@@ -217,6 +211,19 @@ public class EventControllerTest extends TestBase {
 
     @Test
     @WithMockUser
+    public void testGetTasksForEventFail() throws Exception {
+        String url = "/events/" + "777727" + "/tasks";
+        logger.debug("Sending GET request on {}", url);
+
+        MockHttpServletResponse response = get(url);
+
+        logger.debug("Response: {}", response.getContentAsString());
+
+        assertEquals(404, response.getStatus());
+    }
+
+    @Test
+    @WithMockUser
     public void testGetUsersForEvent() throws Exception {
         String url = "/events/" + event.getId() + "/users";
         logger.debug("Sending GET request on {}", url);
@@ -233,4 +240,18 @@ public class EventControllerTest extends TestBase {
         assertEquals("Frane", user1.getFirstName());
         assertEquals("Varalica", user1.getLastName());
     }
+
+    @Test
+    @WithMockUser
+    public void testGetUsersForEventFail() throws Exception {
+        String url = "/events/" + "777727L" + "/events";
+        logger.debug("Sending GET request on {}", url);
+
+        MockHttpServletResponse response = get(url);
+
+        logger.debug("Response: {}", response.getContentAsString());
+
+        assertEquals(404, response.getStatus());
+    }
+
 }
