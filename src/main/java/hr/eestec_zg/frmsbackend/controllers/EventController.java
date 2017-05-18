@@ -58,17 +58,23 @@ public class EventController {
     @ResponseStatus(HttpStatus.OK)
     public void updateEvents(@PathVariable("id") Long id, @RequestBody Event event) {
         if (id == null) {
-            throw new  IllegalArgumentException("Id must not be null value");
+            throw new IllegalArgumentException("Id must not be null value");
         }
 
-        eventService.updateEvent(event);
+        Event oldEvent = this.eventService.getEventById(id);
+
+        oldEvent.setName(event.getName());
+        oldEvent.setShortName(event.getShortName());
+        oldEvent.setYear(event.getYear());
+
+        eventService.updateEvent(oldEvent);
     }
 
     @RequestMapping(value = "/events/{id}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.OK)
     public void deleteEvent(@PathVariable("id") Long id) {
         if (id == null) {
-            throw new  IllegalArgumentException("Id must not be null value");
+            throw new IllegalArgumentException("Id must not be null value");
         }
 
         eventService.deleteEvent(id);
@@ -78,7 +84,7 @@ public class EventController {
     @ResponseStatus(HttpStatus.OK)
     public List<Task> getTasksByEvent(@PathVariable("id") Long id) {
         if (id == null) {
-            throw new  IllegalArgumentException("Id must not be null value");
+            throw new IllegalArgumentException("Id must not be null value");
         }
         return taskService.getTasksByEvent(id);
     }
@@ -97,13 +103,6 @@ public class EventController {
                 .filter(task -> task.getAssignee() != null)
                 .forEach(filteredTask -> users.add(filteredTask.getAssignee()));
 
-/* ovo gore je isto ovom zakomentiranom
-        for (Task task: tasks) {
-            if (task.getAssignee() != null){
-                users.add(task.getAssignee());
-            }
-        }
-*/
         return users;
     }
 }
