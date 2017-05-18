@@ -50,7 +50,7 @@ public class EventServiceImpl implements EventService {
 
         Event event = eventRepository.getEvent(eventId);
         if (event == null) {
-            throw new IllegalArgumentException("Event not found in database");
+            throw new EventNotFoundException();
         }
 
         eventRepository.deleteEvent(event);
