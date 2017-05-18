@@ -1,7 +1,14 @@
 package hr.eestec_zg.frmsbackend;
 
-import hr.eestec_zg.frmsbackend.domain.models.*;
-import hr.eestec_zg.frmsbackend.services.UserService;
+import hr.eestec_zg.frmscore.domain.models.Company;
+import hr.eestec_zg.frmscore.domain.models.CompanyType;
+import hr.eestec_zg.frmscore.domain.models.Event;
+import hr.eestec_zg.frmscore.domain.models.Role;
+import hr.eestec_zg.frmscore.domain.models.SponsorshipType;
+import hr.eestec_zg.frmscore.domain.models.Task;
+import hr.eestec_zg.frmscore.domain.models.TaskStatus;
+import hr.eestec_zg.frmscore.domain.models.User;
+import hr.eestec_zg.frmscore.services.UserService;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -10,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.test.context.support.WithMockUser;
 
-import javax.persistence.GeneratedValue;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;

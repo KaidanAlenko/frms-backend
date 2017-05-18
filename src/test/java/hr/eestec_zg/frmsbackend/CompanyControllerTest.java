@@ -1,7 +1,7 @@
 package hr.eestec_zg.frmsbackend;
 
-import hr.eestec_zg.frmsbackend.domain.models.Company;
-import hr.eestec_zg.frmsbackend.services.CompanyService;
+import hr.eestec_zg.frmscore.domain.models.Company;
+import hr.eestec_zg.frmscore.services.CompanyService;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -10,12 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.test.context.support.WithMockUser;
 
-import javax.persistence.GeneratedValue;
 import java.util.List;
 
-import static hr.eestec_zg.frmsbackend.domain.models.CompanyType.COMPUTING;
+import static hr.eestec_zg.frmscore.domain.models.CompanyType.COMPUTING;
 import static org.junit.Assert.assertEquals;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 public class CompanyControllerTest extends TestBase {
 
@@ -86,7 +84,7 @@ public class CompanyControllerTest extends TestBase {
     @Test
     @WithMockUser
     public void testDeleteReadCompanies() throws Exception {
-        long  companyId = companyService.getCompanyByName("span").getId();
+        long companyId = companyService.getCompanyByName("span").getId();
         String url = "/companies/" + companyId;
         logger.debug("Sending request on {}", url);
         MockHttpServletResponse response = get(url);
@@ -139,8 +137,8 @@ public class CompanyControllerTest extends TestBase {
         logger.debug("Response: {}", response.getContentAsString());
         assertEquals(200, response.getStatus());
 
-         c1.setName("spanama");
-         c1.setShortName("SS");
+        c1.setName("spanama");
+        c1.setShortName("SS");
 
         String c2Json = jacksonService.asJson(c1);
 
@@ -173,7 +171,7 @@ public class CompanyControllerTest extends TestBase {
 
         logger.debug("Response: {}", response.getContentAsString());
 
-       assertEquals(404, response.getStatus());
+        assertEquals(404, response.getStatus());
     }
 
 }

@@ -1,9 +1,9 @@
 package hr.eestec_zg.frmsbackend.controllers;
 
-import hr.eestec_zg.frmsbackend.domain.models.Task;
-import hr.eestec_zg.frmsbackend.domain.models.TaskStatus;
-import hr.eestec_zg.frmsbackend.domain.models.dto.TaskDto;
-import hr.eestec_zg.frmsbackend.services.TaskService;
+import hr.eestec_zg.frmscore.domain.models.Task;
+import hr.eestec_zg.frmscore.domain.models.TaskStatus;
+import hr.eestec_zg.frmscore.domain.models.dto.TaskDto;
+import hr.eestec_zg.frmscore.services.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,27 +22,27 @@ public class TaskController {
     @Autowired
     private TaskService taskService;
 
-    @RequestMapping(method= RequestMethod.GET)
-    @ResponseStatus(value= HttpStatus.OK)
-    public List <Task> getActiveTasks(){
+    @RequestMapping(method = RequestMethod.GET)
+    @ResponseStatus(value = HttpStatus.OK)
+    public List<Task> getActiveTasks() {
         return taskService.getTaskByStatus(TaskStatus.IN_PROGRESS);
     }
 
-    @RequestMapping(method= RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.CREATED)
-    public Task createTask(@RequestBody TaskDto task){
+    public Task createTask(@RequestBody TaskDto task) {
         return taskService.createTask(task);
     }
 
-    @RequestMapping(value="{id}", method = RequestMethod.GET)
-    @ResponseStatus(value= HttpStatus.OK)
-    public Task getTaskByID(@PathVariable("id") Long id){
+    @RequestMapping(value = "{id}", method = RequestMethod.GET)
+    @ResponseStatus(value = HttpStatus.OK)
+    public Task getTaskByID(@PathVariable("id") Long id) {
         return taskService.getTask(id);
     }
 
-    @RequestMapping(value="{id}", method = RequestMethod.PUT)
-    @ResponseStatus(value= HttpStatus.OK)
-    public void updateTask(@PathVariable("id") Long id, @RequestBody TaskDto task){
+    @RequestMapping(value = "{id}", method = RequestMethod.PUT)
+    @ResponseStatus(value = HttpStatus.OK)
+    public void updateTask(@PathVariable("id") Long id, @RequestBody TaskDto task) {
         if (id == null) {
             throw new IllegalArgumentException("Id is not defined");
         }
@@ -50,9 +50,9 @@ public class TaskController {
         this.taskService.updateTask(id, task);
     }
 
-    @RequestMapping(value="{id}", method = RequestMethod.DELETE)
-    @ResponseStatus(value= HttpStatus.OK)
-    public void deleteTask(@PathVariable("id") Long id){
+    @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
+    @ResponseStatus(value = HttpStatus.OK)
+    public void deleteTask(@PathVariable("id") Long id) {
         taskService.deleteTask(taskService.getTask(id));
     }
 }

@@ -1,14 +1,13 @@
 package hr.eestec_zg.frmsbackend;
 
-import hr.eestec_zg.frmsbackend.domain.models.Company;
-import hr.eestec_zg.frmsbackend.domain.models.CompanyType;
-import hr.eestec_zg.frmsbackend.domain.models.Event;
-import hr.eestec_zg.frmsbackend.domain.models.Role;
-import hr.eestec_zg.frmsbackend.domain.models.SponsorshipType;
-import hr.eestec_zg.frmsbackend.domain.models.Task;
-import hr.eestec_zg.frmsbackend.domain.models.TaskStatus;
-import hr.eestec_zg.frmsbackend.domain.models.User;
-import hr.eestec_zg.frmsbackend.exceptions.EventNotFoundException;
+import hr.eestec_zg.frmscore.domain.models.Company;
+import hr.eestec_zg.frmscore.domain.models.CompanyType;
+import hr.eestec_zg.frmscore.domain.models.Event;
+import hr.eestec_zg.frmscore.domain.models.Role;
+import hr.eestec_zg.frmscore.domain.models.SponsorshipType;
+import hr.eestec_zg.frmscore.domain.models.Task;
+import hr.eestec_zg.frmscore.domain.models.TaskStatus;
+import hr.eestec_zg.frmscore.domain.models.User;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
