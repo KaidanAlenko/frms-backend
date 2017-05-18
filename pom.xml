@@ -6,7 +6,7 @@
 
     <groupId>hr.eestec_zg</groupId>
     <artifactId>frms-backend</artifactId>
-    <version>0.2-SNAPSHOT</version>
+    <version>0.2</version>
 
     <packaging>war</packaging>
 
