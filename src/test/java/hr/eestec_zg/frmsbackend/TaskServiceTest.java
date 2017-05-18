@@ -1,19 +1,23 @@
 package hr.eestec_zg.frmsbackend;
 
-import hr.eestec_zg.frmsbackend.domain.models.*;
+import hr.eestec_zg.frmsbackend.domain.models.Company;
+import hr.eestec_zg.frmsbackend.domain.models.CompanyType;
+import hr.eestec_zg.frmsbackend.domain.models.Event;
+import hr.eestec_zg.frmsbackend.domain.models.Role;
+import hr.eestec_zg.frmsbackend.domain.models.SponsorshipType;
+import hr.eestec_zg.frmsbackend.domain.models.Task;
+import hr.eestec_zg.frmsbackend.domain.models.TaskStatus;
+import hr.eestec_zg.frmsbackend.domain.models.User;
+import hr.eestec_zg.frmsbackend.domain.models.dto.TaskDto;
+import hr.eestec_zg.frmsbackend.exceptions.TaskNotFoundException;
+import hr.eestec_zg.frmsbackend.exceptions.UserNotFoundException;
 import hr.eestec_zg.frmsbackend.services.TaskService;
-import hr.eestec_zg.frmsbackend.exceptions.*;
-
-
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-
-import static hr.eestec_zg.frmsbackend.domain.models.SponsorshipType.FINANCIAL;
-import static hr.eestec_zg.frmsbackend.domain.models.TaskStatus.IN_PROGRESS;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -43,21 +47,21 @@ public class TaskServiceTest extends TestBase{
     public void testCreateTask(){
         user2 = new User("Fico", "Ls", "emaail1", "psass1", "0001", Role.USER);
         userRepository.createUser(user2);
-        Task task = new Task(event, company, user2, SponsorshipType.FINANCIAL, null, null, null, TaskStatus.IN_PROGRESS, "");
-        taskService.createTask(task);
+        TaskDto task = new TaskDto(event.getId(), company.getId(), user2.getId(), SponsorshipType.FINANCIAL, null, null, null, TaskStatus.IN_PROGRESS, "");
+        Task newTask = taskService.createTask(task);
         List<Task> tasks = taskService.getTasksByCompany(company.getId());
-        assertTrue(tasks.size() == 2 && tasks.contains(task));
+        assertTrue(tasks.size() == 2 && tasks.contains(newTask));
     }
 
     @Test
     public void testCreateDeleteTask(){
         user2 = new User("Ficasdo", "Lfs", "emagail1", "psagss1", "0001", Role.USER);
         userRepository.createUser(user2);
-        Task task = new Task(event, company, user2, SponsorshipType.MATERIAL, null, null, null, TaskStatus.IN_PROGRESS, "");
-        taskService.createTask(task);
+        TaskDto task = new TaskDto(event.getId(), company.getId(), user2.getId(), SponsorshipType.MATERIAL, null, null, null, TaskStatus.IN_PROGRESS, "");
+        Task newTask = taskService.createTask(task);
         taskService.deleteTask(t1);
         List<Task> tasks = taskService.getTasksByCompany(company.getId());
-        assertTrue(tasks.size() == 1 && tasks.contains(task));
+        assertTrue(tasks.size() == 1 && tasks.contains(newTask));
     }
 
     @Test
@@ -66,7 +70,20 @@ public class TaskServiceTest extends TestBase{
         userRepository.createUser(user2);
         Task task = taskService.getTask(t1.getId());
         task.setAssignee(user2);
-        taskService.updateTask(task);
+
+        TaskDto taskDto = new TaskDto(
+                task.getEvent().getId(),
+                task.getCompany().getId(),
+                task.getAssignee().getId(),
+                task.getType(),
+                task.getCallTime(),
+                task.getMailTime(),
+                task.getFollowUpTime(),
+                task.getStatus(),
+                task.getNotes());
+
+        taskService.updateTask(task.getId(), taskDto);
+
         List<Task> tasks = taskService.getTasksByCompany(company.getId());
         assertTrue(tasks.size() == 1 && tasks.contains(task));
     }
