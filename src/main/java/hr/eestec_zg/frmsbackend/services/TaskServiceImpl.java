@@ -44,11 +44,11 @@ public class TaskServiceImpl implements TaskService {
         }
         User user = userRepository.getUser(task.getUserId());
         Company company = companyRepository.getCompany(task.getCompanyId());
-        if(company==null){
+        if (company == null) {
             throw new IllegalArgumentException("Company does not exist");
         }
         Event event = eventRepository.getEvent(task.getEventId());
-        if (event==null){
+        if (event == null) {
             throw new IllegalArgumentException("Event does not exist");
         }
 
@@ -58,12 +58,40 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public void updateTask(Task task) {
+    public void updateTask(Long id, TaskDto task) {
         if (task == null) {
             throw new IllegalArgumentException("Task not defined");
         }
 
-        taskRepository.updateTask(task);
+        Task oldTask = this.taskRepository.getTask(id);
+        if (oldTask == null) {
+            throw new TaskNotFoundException();
+        }
+        User user = null;
+        Long assigneeId = task.getUserId();
+        if (assigneeId != null) {
+            user = this.userRepository.getUser(assigneeId);
+        }
+        Company company = this.companyRepository.getCompany(task.getCompanyId());
+        if (company == null) {
+            throw new CompanyNotFoundException();
+        }
+        Event event = this.eventRepository.getEvent(task.getEventId());
+        if (event == null) {
+            throw new EventNotFoundException();
+        }
+
+        oldTask.setEvent(event);
+        oldTask.setCompany(company);
+        oldTask.setAssignee(user);
+        oldTask.setType(task.getType());
+        oldTask.setCallTime(task.getCallTime());
+        oldTask.setMailTime(task.getMailTime());
+        oldTask.setFollowUpTime(task.getFollowUpTime());
+        oldTask.setStatus(task.getStatus());
+        oldTask.setNotes(task.getNotes());
+
+        taskRepository.updateTask(oldTask);
 
     }
 

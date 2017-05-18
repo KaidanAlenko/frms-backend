@@ -6,10 +6,10 @@ import hr.eestec_zg.frmsbackend.domain.models.TaskStatus;
 import java.time.ZonedDateTime;
 
 public class TaskDto {
-    private long id;
-    private long eventId;
-    private long companyId;
-    private long userId;
+    private Long id;
+    private Long eventId;
+    private Long companyId;
+    private Long userId;
     private SponsorshipType type;
     private ZonedDateTime callTime;
     private ZonedDateTime mailTime;
@@ -32,7 +32,7 @@ public class TaskDto {
         this.notes = notes;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -40,13 +40,13 @@ public class TaskDto {
         this.id = id;
     }
 
-    public long getEventId() { return eventId; }
+    public Long getEventId() { return eventId; }
 
     public void setEventId (long eventId) {
         this.eventId = eventId;
     }
 
-    public long getCompanyId() {
+    public Long getCompanyId() {
         return companyId;
     }
 
@@ -54,7 +54,7 @@ public class TaskDto {
         this.companyId = companyId;
     }
 
-    public long getUserId() {
+    public Long getUserId() {
         return userId;
     }
 

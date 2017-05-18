@@ -1,7 +1,5 @@
 package hr.eestec_zg.frmsbackend.controllers;
 
-import java.util.List;
-
 import hr.eestec_zg.frmsbackend.domain.models.Task;
 import hr.eestec_zg.frmsbackend.domain.models.TaskStatus;
 import hr.eestec_zg.frmsbackend.domain.models.dto.TaskDto;
@@ -14,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/tasks")
@@ -42,9 +42,12 @@ public class TaskController {
 
     @RequestMapping(value="{id}", method = RequestMethod.PUT)
     @ResponseStatus(value= HttpStatus.OK)
-    public void updateTask(@RequestBody Task task){
+    public void updateTask(@PathVariable("id") Long id, @RequestBody TaskDto task){
+        if (id == null) {
+            throw new IllegalArgumentException("Id is not defined");
+        }
 
-        taskService.updateTask(task);
+        this.taskService.updateTask(id, task);
     }
 
     @RequestMapping(value="{id}", method = RequestMethod.DELETE)
