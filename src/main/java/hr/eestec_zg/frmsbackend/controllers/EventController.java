@@ -1,10 +1,10 @@
 package hr.eestec_zg.frmsbackend.controllers;
 
-import hr.eestec_zg.frmsbackend.domain.models.Event;
-import hr.eestec_zg.frmsbackend.domain.models.Task;
-import hr.eestec_zg.frmsbackend.domain.models.User;
-import hr.eestec_zg.frmsbackend.services.EventService;
-import hr.eestec_zg.frmsbackend.services.TaskService;
+import hr.eestec_zg.frmscore.domain.models.Event;
+import hr.eestec_zg.frmscore.domain.models.Task;
+import hr.eestec_zg.frmscore.domain.models.User;
+import hr.eestec_zg.frmscore.services.EventService;
+import hr.eestec_zg.frmscore.services.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
