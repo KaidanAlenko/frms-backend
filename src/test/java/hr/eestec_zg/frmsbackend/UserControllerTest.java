@@ -1,5 +1,6 @@
 package hr.eestec_zg.frmsbackend;
 
+import hr.eestec_zg.frmscore.domain.dto.TaskStatisticsDto;
 import hr.eestec_zg.frmscore.domain.models.Company;
 import hr.eestec_zg.frmscore.domain.models.CompanyType;
 import hr.eestec_zg.frmscore.domain.models.Event;
@@ -91,7 +92,7 @@ public class UserControllerTest extends TestBase {
     @Test
     @WithMockUser
     public void testDeleteReadUser() throws Exception {
-        long  userId = userService.getUserByEmail("email1").getId();
+        long userId = userService.getUserByEmail("email1").getId();
         String url = "/users/" + userId;
         logger.debug("Sending request on {}", url);
         MockHttpServletResponse response = get(url);
@@ -196,7 +197,7 @@ public class UserControllerTest extends TestBase {
         Task task = new Task(event, c, u1, SponsorshipType.FINANCIAL, null, null, null, TaskStatus.IN_PROGRESS, "");
         taskRepository.createTask(task);
 
-        final String url = "/users/" + u1.getId()+"/tasks";
+        final String url = "/users/" + u1.getId() + "/tasks";
         logger.debug("Sending request on {}", url);
 
         MockHttpServletResponse response = get(url);
@@ -206,7 +207,7 @@ public class UserControllerTest extends TestBase {
         assertEquals(200, response.getStatus());
         List<Task> tasks = jacksonService.readListOfObjects(response.getContentAsString(), Task.class);
 
-        assertEquals(1,tasks.size());
+        assertEquals(1, tasks.size());
 
     }
 
@@ -215,7 +216,7 @@ public class UserControllerTest extends TestBase {
     public void testGetUsersTasksNull() throws Exception {
         User u1 = userService.getUserByEmail("email1");
 
-        final String url = "/users/" + u1.getId()+"/tasks";
+        final String url = "/users/" + u1.getId() + "/tasks";
         logger.debug("Sending request on {}", url);
 
         MockHttpServletResponse response = get(url);
@@ -225,6 +226,26 @@ public class UserControllerTest extends TestBase {
         assertEquals(200, response.getStatus());
         List<Task> tasks = jacksonService.readListOfObjects(response.getContentAsString(), Task.class);
 
-        assertEquals(0,tasks.size());
+        assertEquals(0, tasks.size());
+    }
+
+    @Test
+    @WithMockUser
+    public void testGetStatisticsForUser() throws Exception {
+        User u1 = userService.getUserByEmail("email1");
+
+        final String url = "/users/" + u1.getId() + "/statistics";
+        logger.debug("Sending request on {}", url);
+
+        MockHttpServletResponse response = get(url);
+
+        logger.debug("Response: {}", response.getContentAsString());
+
+        assertEquals(200, response.getStatus());
+        TaskStatisticsDto statistics = jacksonService.readJson(response.getContentAsString(), TaskStatisticsDto.class);
+
+        assertEquals(0, (long) statistics.getSuccessful());
+        assertEquals(0, (long) statistics.getUnsuccessful());
+        assertEquals(0, (long) statistics.getNumberOfEvents());
     }
 }

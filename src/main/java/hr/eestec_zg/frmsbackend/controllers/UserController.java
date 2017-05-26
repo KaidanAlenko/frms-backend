@@ -1,7 +1,9 @@
 package hr.eestec_zg.frmsbackend.controllers;
 
+import hr.eestec_zg.frmscore.domain.dto.TaskStatisticsDto;
 import hr.eestec_zg.frmscore.domain.models.Task;
 import hr.eestec_zg.frmscore.domain.models.User;
+import hr.eestec_zg.frmscore.services.TaskService;
 import hr.eestec_zg.frmscore.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,8 +19,11 @@ import java.util.List;
 @RestController
 public class UserController {
 
-     @Autowired
+    @Autowired
     private UserService userService;
+
+    @Autowired
+    private TaskService taskService;
 
     @RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
@@ -44,6 +49,12 @@ public class UserController {
         userService.deleteUser(id);
     }
 
+    @RequestMapping(value = "/users/{id}/statistics", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    public TaskStatisticsDto getStatisticsForUser(@PathVariable("id") Long id) {
+        return taskService.getStatistics(id);
+    }
+
     @RequestMapping(value = "/users", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     public User createUser(@RequestBody User user) {
@@ -59,6 +70,7 @@ public class UserController {
         }
         userService.updateUser(user);
     }
+
     @RequestMapping(value = "/users/{id}/tasks", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     public List<Task> getUserTasks(@PathVariable("id") Long id) {
