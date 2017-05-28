@@ -2,6 +2,7 @@ package hr.eestec_zg.frmsbackend.controllers;
 
 import hr.eestec_zg.frmscore.domain.dto.TaskStatisticsDto;
 import hr.eestec_zg.frmscore.domain.models.Task;
+import hr.eestec_zg.frmscore.domain.models.TaskStatus;
 import hr.eestec_zg.frmscore.domain.models.User;
 import hr.eestec_zg.frmscore.services.TaskService;
 import hr.eestec_zg.frmscore.services.UserService;
@@ -73,10 +74,10 @@ public class UserController {
 
     @RequestMapping(value = "/users/{id}/tasks", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
-    public List<Task> getUserTasks(@PathVariable("id") Long id, String status) {
+    public List<Task> getUserTasks(@PathVariable("id") Long id, TaskStatus status) {
         if (id == null) {
             throw new IllegalArgumentException("Id must not be null value");
         }
-        return userService.getAssignedTasks(id);
+        return userService.getAssignedTasks(id, status);
     }
 }
