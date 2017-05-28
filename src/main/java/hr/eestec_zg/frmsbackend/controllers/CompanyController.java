@@ -1,6 +1,7 @@
 package hr.eestec_zg.frmsbackend.controllers;
 
 import hr.eestec_zg.frmscore.domain.models.Company;
+import hr.eestec_zg.frmscore.domain.models.CompanyType;
 import hr.eestec_zg.frmscore.services.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,12 @@ public class CompanyController {
 
     @Autowired
     private CompanyService companyService;
+
+    @RequestMapping(value = "/companies/types", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    public CompanyType[] getCompanyTypes() {
+        return CompanyType.values();
+    }
 
     @RequestMapping(value = "/companies/{id}", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
