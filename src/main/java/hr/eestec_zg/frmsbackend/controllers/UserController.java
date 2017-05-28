@@ -78,6 +78,10 @@ public class UserController {
         if (id == null) {
             throw new IllegalArgumentException("Id must not be null value");
         }
-        return userService.getAssignedTasks(id, status);
+        if (status != null) {
+            return userService.getAssignedTasks(id, status);
+        } else {
+            return userService.getAssignedTasks(id);
+        }
     }
 }
