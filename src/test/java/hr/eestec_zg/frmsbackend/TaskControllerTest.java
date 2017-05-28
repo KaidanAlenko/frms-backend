@@ -34,7 +34,7 @@ public class TaskControllerTest extends TestBase {
         event = new Event("E", "E", "2017");
         event2 = new Event("E2", "E2", "2017");
         event3 = new Event("E", "E", "2016");
-        user = new User("F", "L", "email1", "pass1", "0001", Role.USER);
+        user = new User("F", "L", "email1", "pass1", "0001", Role.USER, null);
         company = new Company("COMPANY", "C", CompanyType.COMPUTING);
         company2 = new Company("COMPANY2", "C", CompanyType.COMPUTING_SCIENCE);
         companyRepository.createCompany(company);

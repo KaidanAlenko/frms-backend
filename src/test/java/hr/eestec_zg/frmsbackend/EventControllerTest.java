@@ -34,7 +34,7 @@ public class EventControllerTest extends TestBase {
         eventRepository.createEvent(event);
         eventRepository.createEvent(event2);
 
-        User user = new User("Frane", "Varalica", "frane@fer.hr", "frane", "1234", Role.USER);
+        User user = new User("Frane", "Varalica", "frane@fer.hr", "frane", "1234", Role.USER, null);
         userRepository.createUser(user);
         Company company = new Company("Infobip", "IB", CompanyType.COMPUTING);
         companyRepository.createCompany(company);

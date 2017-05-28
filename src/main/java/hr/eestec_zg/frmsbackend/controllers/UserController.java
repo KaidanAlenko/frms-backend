@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class UserController {
@@ -83,5 +84,27 @@ public class UserController {
         } else {
             return userService.getAssignedTasks(id);
         }
+    }
+
+    @RequestMapping(value = "/users/{id}/notes", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    public String getUserNotes(@PathVariable("id") Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException("Id must not be null value");
+        }
+        User user = userService.getUserById(id);
+        return user.getNotes();
+    }
+
+    @RequestMapping(value = "/users/{id}/notes", method = RequestMethod.PUT)
+    @ResponseStatus(HttpStatus.OK)
+    public void updateUserNotes(@PathVariable("id") Long id, @RequestBody Map<String, String> requestBody) {
+        if (id == null) {
+            throw new IllegalArgumentException("Id must not be null value");
+        }
+        User user = userService.getUserById(id);
+        user.setNotes(requestBody.get("notes"));
+
+        userService.updateUser(user);
     }
 }

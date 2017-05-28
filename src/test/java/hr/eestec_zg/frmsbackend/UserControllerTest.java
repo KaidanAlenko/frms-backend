@@ -32,8 +32,8 @@ public class UserControllerTest extends TestBase {
 
     @Before
     public void setTestData() {
-        user1 = new User("F", "L", "email1", "pass1", "0001", Role.USER);
-        user2 = new User("F", "A", "email2", "pass2", "0002", Role.COORDINATOR);
+        user1 = new User("F", "L", "email1", "pass1", "0001", Role.USER, null);
+        user2 = new User("F", "A", "email2", "pass2", "0002", Role.COORDINATOR, null);
         userService.createUser(user1);
         userService.createUser(user2);
     }
@@ -112,7 +112,7 @@ public class UserControllerTest extends TestBase {
     @Test
     @WithMockUser
     public void testCreateReadUsers() throws Exception {
-        User user3 = new User("Fifo", "Lifo", "email1i@fer.hr", "pass9", "02001", Role.USER);
+        User user3 = new User("Fifo", "Lifo", "email1i@fer.hr", "pass9", "02001", Role.USER, null);
 
         String url = "/users";
         String c2Json = jacksonService.asJson(user3);
@@ -171,7 +171,7 @@ public class UserControllerTest extends TestBase {
     @Test
     @WithMockUser
     public void testPutFail() throws Exception {
-        User user3 = new User("Fifo", "Lifo", "email1i@fer.hr", "pass9", "02001", Role.USER);
+        User user3 = new User("Fifo", "Lifo", "email1i@fer.hr", "pass9", "02001", Role.USER, null);
         String url = "/users/" + 777727L;
         String c2Json = jacksonService.asJson(user3);
         logger.debug("Sending request on {}", url);
