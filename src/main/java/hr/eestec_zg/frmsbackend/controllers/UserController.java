@@ -73,7 +73,7 @@ public class UserController {
 
     @RequestMapping(value = "/users/{id}/tasks", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
-    public List<Task> getUserTasks(@PathVariable("id") Long id) {
+    public List<Task> getUserTasks(@PathVariable("id") Long id, String status) {
         if (id == null) {
             throw new IllegalArgumentException("Id must not be null value");
         }
