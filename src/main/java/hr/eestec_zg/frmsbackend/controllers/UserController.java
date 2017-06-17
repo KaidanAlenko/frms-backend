@@ -8,6 +8,7 @@ import hr.eestec_zg.frmscore.services.TaskService;
 import hr.eestec_zg.frmscore.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +27,9 @@ public class UserController {
 
     @Autowired
     private TaskService taskService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
@@ -60,6 +64,7 @@ public class UserController {
     @RequestMapping(value = "/users", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     public User createUser(@RequestBody User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userService.createUser(user);
         return user;
     }
@@ -70,7 +75,20 @@ public class UserController {
         if (id == null) {
             throw new IllegalArgumentException("Id must not be null value");
         }
-        userService.updateUser(user);
+        User oldUser = userService.getUserById(id);
+        oldUser.setFirstName(user.getFirstName());
+        oldUser.setLastName(user.getLastName());
+        oldUser.setEmail(user.getEmail());
+        oldUser.setPhoneNumber(user.getPhoneNumber());
+        oldUser.setRole(user.getRole());
+
+        final String password = user.getPassword();
+
+        if (password != null) {
+            oldUser.setPassword(passwordEncoder.encode(password));
+        }
+
+        userService.updateUser(oldUser);
     }
 
     @RequestMapping(value = "/users/{id}/tasks", method = RequestMethod.GET)
