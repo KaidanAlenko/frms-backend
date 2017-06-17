@@ -65,6 +65,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     public User createUser(@RequestBody User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setNotes("");
         userService.createUser(user);
         return user;
     }
