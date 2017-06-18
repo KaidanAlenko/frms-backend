@@ -43,8 +43,10 @@ public class TaskController {
 
     @RequestMapping(value = "search", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
-    public List<Task> filterTasks(Integer eventId, Integer companyId, SponsorshipType type, TaskStatus status) {
-        return taskService.filterTasks(eventId, companyId, type, status);
+    public List<Task> filterTasks(
+            Integer eventId, Integer companyId, Integer userId, SponsorshipType type, TaskStatus status) {
+
+        return taskService.filterTasks(eventId, companyId, userId, type, status);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
