@@ -96,6 +96,22 @@ public class TaskControllerTest extends TestBase {
         assertEquals(404, response.getStatus());
     }
 
+    @SuppressWarnings("unchecked")
+    @Test
+    @WithMockUser
+    public void filterTasks() throws Exception {
+        final String url = "/tasks/search?status=IN_PROGRESS&type=MATERIAL";
+
+        logger.debug("Sending request on {}", url);
+        MockHttpServletResponse response = get(url);
+        logger.debug("Response: {}", response.getContentAsString());
+        assertEquals(200, response.getStatus());
+
+        List<Task> foundTasks = jacksonService.readJson(response.getContentAsString(), List.class);
+
+        assertEquals(2, foundTasks.size());
+    }
+
     @Test
     @WithMockUser
     public void testCreateNewTask() throws Exception {

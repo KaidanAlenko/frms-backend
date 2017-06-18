@@ -1,5 +1,6 @@
 package hr.eestec_zg.frmsbackend.controllers;
 
+import hr.eestec_zg.frmscore.domain.models.SponsorshipType;
 import hr.eestec_zg.frmscore.domain.models.Task;
 import hr.eestec_zg.frmscore.domain.models.TaskStatus;
 import hr.eestec_zg.frmscore.domain.models.dto.TaskDto;
@@ -38,6 +39,12 @@ public class TaskController {
     @ResponseStatus(value = HttpStatus.OK)
     public Task getTaskByID(@PathVariable("id") Long id) {
         return taskService.getTask(id);
+    }
+
+    @RequestMapping(value = "search", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    public List<Task> filterTasks(Integer eventId, Integer companyId, SponsorshipType type, TaskStatus status) {
+        return taskService.filterTasks(eventId, companyId, type, status);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
