@@ -51,6 +51,12 @@ public class CompanyController {
         companyService.deleteCompany(id);
     }
 
+    @RequestMapping(value = "/companies/search", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    public List<Company> filterCompanies(String name, CompanyType type) {
+        return companyService.filterCompanies(name, type);
+    }
+
     @RequestMapping(value = "/companies", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     public Company createCompany(@RequestBody Company company) {

@@ -100,6 +100,19 @@ public class CompanyControllerTest extends TestBase {
         assertEquals(404, response.getStatus());
     }
 
+    @SuppressWarnings("unchecked")
+    @Test
+    @WithMockUser
+    public void testFilterCompanies() throws Exception {
+        String url = "/companies/search?type=COMPUTING";
+        logger.debug("Sending request on {}", url);
+        MockHttpServletResponse response = get(url);
+        logger.debug("Response: {}", response.getContentAsString());
+        assertEquals(200, response.getStatus());
+
+        List<Company> companies = jacksonService.readJson(response.getContentAsString(), List.class);
+        assertEquals(2, companies.size());
+    }
 
     @Test
     @WithMockUser
