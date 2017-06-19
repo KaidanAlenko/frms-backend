@@ -1,6 +1,7 @@
 package hr.eestec_zg.frmsbackend.controllers;
 
 import hr.eestec_zg.frmscore.domain.dto.TaskStatisticsDto;
+import hr.eestec_zg.frmscore.domain.models.Role;
 import hr.eestec_zg.frmscore.domain.models.Task;
 import hr.eestec_zg.frmscore.domain.models.TaskStatus;
 import hr.eestec_zg.frmscore.domain.models.User;
@@ -42,8 +43,13 @@ public class UserController {
 
     @RequestMapping(value = "/users", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
-    public List<User> getUsers() {
-        return userService.getAllUsers();
+    public List<User> getUsers(String role) {
+        if (role != null && (role.equalsIgnoreCase("ADMIN") || role.equalsIgnoreCase("USER"))) {
+            Role userRole = Role.valueOf(role);
+            return userService.getUsersByRole(userRole);
+        } else {
+            return userService.getAllUsers();
+        }
     }
 
     @RequestMapping(value = "/users/{id}", method = RequestMethod.DELETE)
