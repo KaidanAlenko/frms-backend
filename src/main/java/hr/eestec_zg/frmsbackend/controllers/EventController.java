@@ -1,5 +1,6 @@
 package hr.eestec_zg.frmsbackend.controllers;
 
+import hr.eestec_zg.frmscore.domain.models.Company;
 import hr.eestec_zg.frmscore.domain.models.Event;
 import hr.eestec_zg.frmscore.domain.models.Task;
 import hr.eestec_zg.frmscore.domain.models.User;
@@ -87,6 +88,12 @@ public class EventController {
             throw new IllegalArgumentException("Id must not be null value");
         }
         return taskService.getTasksByEvent(id);
+    }
+
+    @RequestMapping(value = "/events/{id}/tasks/assign", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    public List<Company> getUnassignedCompaniesForEvent(@PathVariable("id") Long id) {
+        return taskService.getCompaniesForWhichThereAreNoTasksForEvent(id);
     }
 
     @RequestMapping(value = "/events/{id}/users", method = RequestMethod.GET)

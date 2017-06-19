@@ -210,6 +210,29 @@ public class EventControllerTest extends TestBase {
 
     @Test
     @WithMockUser
+    public void testGetUnassignedCompaniesForEvent() throws Exception {
+        String url = "/events/" + event.getId() + "/tasks/assign";
+        logger.debug("Sending GET request on {}", url);
+        MockHttpServletResponse response = get(url);
+        logger.debug("Response: {}", response.getContentAsString());
+        assertEquals(200, response.getStatus());
+
+        List<Company> companies = jacksonService.readListOfObjects(response.getContentAsString(), Company.class);
+        assertEquals(0, companies.size());
+
+        Company c = new Company("CompanyName", "CompanyShortName", CompanyType.COMPUTING);
+        companyRepository.createCompany(c);
+
+        response = get(url);
+        logger.debug("Response: {}", response.getContentAsString());
+        assertEquals(200, response.getStatus());
+
+        companies = jacksonService.readListOfObjects(response.getContentAsString(), Company.class);
+        assertEquals(1, companies.size());
+    }
+
+    @Test
+    @WithMockUser
     public void testGetTasksForEventFail() throws Exception {
         String url = "/events/" + "777727" + "/tasks";
         logger.debug("Sending GET request on {}", url);
