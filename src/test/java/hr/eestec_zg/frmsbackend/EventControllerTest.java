@@ -229,6 +229,13 @@ public class EventControllerTest extends TestBase {
 
         companies = jacksonService.readListOfObjects(response.getContentAsString(), Company.class);
         assertEquals(1, companies.size());
+
+        response = get(url + "?name=omp&type=COMPUTING");
+        logger.debug("Response: {}", response.getContentAsString());
+        assertEquals(200, response.getStatus());
+
+        companies = jacksonService.readListOfObjects(response.getContentAsString(), Company.class);
+        assertEquals(1, companies.size());
     }
 
     @Test

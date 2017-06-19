@@ -1,6 +1,7 @@
 package hr.eestec_zg.frmsbackend.controllers;
 
 import hr.eestec_zg.frmscore.domain.models.Company;
+import hr.eestec_zg.frmscore.domain.models.CompanyType;
 import hr.eestec_zg.frmscore.domain.models.Event;
 import hr.eestec_zg.frmscore.domain.models.Task;
 import hr.eestec_zg.frmscore.domain.models.User;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController
 public class EventController {
@@ -92,8 +95,26 @@ public class EventController {
 
     @RequestMapping(value = "/events/{id}/tasks/assign", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
-    public List<Company> getUnassignedCompaniesForEvent(@PathVariable("id") Long id) {
-        return taskService.getCompaniesForWhichThereAreNoTasksForEvent(id);
+    public List<Company> getUnassignedCompaniesForEvent(@PathVariable("id") Long id, String name, CompanyType type) {
+        List<Company> companies = taskService.getCompaniesForWhichThereAreNoTasksForEvent(id);
+
+        Stream<Company> companyStream = companies.stream();
+
+        if (name != null) {
+            companyStream = companyStream
+                    .filter(c -> {
+                        final String searchTerm = name.toLowerCase();
+
+                        return c.getName().toLowerCase().contains(searchTerm) ||
+                                c.getShortName().toLowerCase().contains(searchTerm);
+                    });
+        }
+
+        if (type != null) {
+            companyStream = companyStream.filter(c -> c.getType().equals(type));
+        }
+
+        return companyStream.collect(Collectors.toList());
     }
 
     @RequestMapping(value = "/events/{id}/users", method = RequestMethod.GET)
