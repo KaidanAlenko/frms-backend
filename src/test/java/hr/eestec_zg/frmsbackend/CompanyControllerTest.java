@@ -43,7 +43,7 @@ public class CompanyControllerTest extends TestBase {
 
     @Test
     @WithMockUser
-    public void testReadSingleCompany() throws Exception {
+    public void testReadingSingleCompany() throws Exception {
         final String url = "/companies/" + testCompany1.getId();
 
         logger.debug("Sending request on {}", url);
@@ -61,7 +61,7 @@ public class CompanyControllerTest extends TestBase {
 
     @Test
     @WithMockUser
-    public void testReadSingleCompanyFail() throws Exception {
+    public void testReadingNonExistingSingleCompany() throws Exception {
         final String url = "/companies/" + -1L;
 
         logger.debug("Sending request on {}", url);
@@ -74,7 +74,7 @@ public class CompanyControllerTest extends TestBase {
 
     @Test
     @WithMockUser
-    public void testReadCompanies() throws Exception {
+    public void testReadingAllCompanies() throws Exception {
         final String url = "/companies";
         logger.debug("Sending request on {}", url);
 
@@ -96,7 +96,7 @@ public class CompanyControllerTest extends TestBase {
 
     @Test
     @WithMockUser
-    public void testDeleteReadCompanies() throws Exception {
+    public void testDeletingCompanies() throws Exception {
         long companyId = companyService.getCompanyByName(TEST_NAME_1).getId();
         String url = "/companies/" + companyId;
 
@@ -124,7 +124,7 @@ public class CompanyControllerTest extends TestBase {
 
     @Test
     @WithMockUser
-    public void testFilterCompanies() throws Exception {
+    public void testFilteringCompaniesByType() throws Exception {
         String url = "/companies/search?type=COMPUTING";
 
         logger.debug("Sending request on {}", url);
@@ -140,7 +140,7 @@ public class CompanyControllerTest extends TestBase {
 
     @Test
     @WithMockUser
-    public void testCreateReadCompany() throws Exception {
+    public void testCreationOfCompanies() throws Exception {
         Company testCompany1 = new Company(TEST_NAME_3, TEST_SHORT_NAME_3, COMPUTING);
         String url = "/companies";
 
@@ -166,7 +166,7 @@ public class CompanyControllerTest extends TestBase {
 
     @Test
     @WithMockUser
-    public void testPutReadCompany() throws Exception {
+    public void testUpdatingCompany() throws Exception {
         Company testCompany = companyService.getCompanyByName("TestName1");
         String url = "/companies/" + testCompany.getId();
 
@@ -205,7 +205,7 @@ public class CompanyControllerTest extends TestBase {
 
     @Test
     @WithMockUser
-    public void testPutFail() throws Exception {
+    public void testUpdatingNonExistingCompany() throws Exception {
         Company testCompany = new Company(TEST_NAME_3, TEST_SHORT_NAME_3, COMPUTING);
         String url = "/companies/" + -1L;
 

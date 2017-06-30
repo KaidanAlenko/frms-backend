@@ -67,7 +67,7 @@ public class UserControllerTest extends TestBase {
 
     @Test
     @WithMockUser
-    public void testReadSingleUser() throws Exception {
+    public void testReadingSingleUser() throws Exception {
         final String url = "/users/" + testUser1.getId();
         logger.debug("Sending request on {}", url);
 
@@ -86,7 +86,7 @@ public class UserControllerTest extends TestBase {
 
     @Test
     @WithMockUser
-    public void testReadSingleUserFail() throws Exception {
+    public void testReadingSingleNonExistingUser() throws Exception {
         final String url = "/users/" + -1L;
         logger.debug("Sending request on {}", url);
 
@@ -99,7 +99,7 @@ public class UserControllerTest extends TestBase {
 
     @Test
     @WithMockUser
-    public void testReadUsers() throws Exception {
+    public void testReadingAllUsers() throws Exception {
         final String url = "/users";
         logger.debug("Sending request on {}", url);
 
@@ -120,7 +120,7 @@ public class UserControllerTest extends TestBase {
 
     @Test
     @WithMockUser
-    public void testDeleteReadUser() throws Exception {
+    public void testDeletingUser() throws Exception {
         long userId = userService.getUserByEmail(TEST_USER_MAIL_1).getId();
         String url = "/users/" + userId;
 
@@ -148,7 +148,7 @@ public class UserControllerTest extends TestBase {
 
     @Test
     @WithMockUser
-    public void testCreateReadUsers() throws Exception {
+    public void testCreationOfUser() throws Exception {
         User testUser1 = new User("Fifo", "Lifo", "email@example.com", "pass", "02001", Role.USER, null);
 
         String url = "/users";
@@ -173,7 +173,7 @@ public class UserControllerTest extends TestBase {
 
     @Test
     @WithMockUser
-    public void testPutReadCompany() throws Exception {
+    public void testUpdatingCompany() throws Exception {
         User testUser = userService.getUserByEmail(TEST_USER_MAIL_1);
 
         String url = "/users/" + testUser.getId();
@@ -211,7 +211,7 @@ public class UserControllerTest extends TestBase {
 
     @Test
     @WithMockUser
-    public void testPutFail() throws Exception {
+    public void testUpdatingNonExistingUser() throws Exception {
         User testUser = new User("Fifo", "Lifo", "email@example.com", "pass", "02001", Role.USER, null);
 
         String url = "/users/" + -1L;
@@ -234,7 +234,7 @@ public class UserControllerTest extends TestBase {
 
     @Test
     @WithMockUser
-    public void testGetUsersTasks() throws Exception {
+    public void testGettingUserTasks() throws Exception {
         User testUser = userService.getUserByEmail(TEST_USER_MAIL_1);
         Event testEvent = new Event("EV", "EV", "2017");
 
@@ -270,7 +270,7 @@ public class UserControllerTest extends TestBase {
 
     @Test
     @WithMockUser
-    public void testGetUsersTasksNull() throws Exception {
+    public void testGettingNonExistingUserTasks() throws Exception {
         User testUser = userService.getUserByEmail(TEST_USER_MAIL_1);
 
         final String url = "/users/" + testUser.getId() + "/tasks";

@@ -118,7 +118,7 @@ public class TaskControllerTest extends TestBase {
 
     @Test
     @WithMockUser
-    public void testGetActiveTasks() throws Exception {
+    public void testGettingActiveTasks() throws Exception {
         final String url = "/tasks";
 
         logger.debug("Sending request on {}", url);
@@ -138,7 +138,7 @@ public class TaskControllerTest extends TestBase {
 
     @Test
     @WithMockUser
-    public void testGetTaskByID() throws Exception {
+    public void testGettingTaskByID() throws Exception {
         final String url = "/tasks/" + testTask1.getId();
 
         logger.debug("Sending request on {}", url);
@@ -153,7 +153,7 @@ public class TaskControllerTest extends TestBase {
 
     @Test
     @WithMockUser
-    public void testGetTaskByIDFail() throws Exception {
+    public void testGetTaskByNonExistingID() throws Exception {
         final String url = "/tasks/" + -1L;
 
         logger.debug("Sending request on {}", url);
@@ -165,7 +165,7 @@ public class TaskControllerTest extends TestBase {
 
     @Test
     @WithMockUser
-    public void filterTasks() throws Exception {
+    public void testFilteringTasks() throws Exception {
         final String url = "/tasks/search?status=IN_PROGRESS&type=MATERIAL";
 
         logger.debug("Sending request on {}", url);
@@ -181,7 +181,7 @@ public class TaskControllerTest extends TestBase {
 
     @Test
     @WithMockUser
-    public void testCreateNewTask() throws Exception {
+    public void testCreationOfTask() throws Exception {
         TaskDto testTaskDto = new TaskDto(
                 testEvent1.getId(),
                 testCompany2.getId(),
@@ -209,7 +209,7 @@ public class TaskControllerTest extends TestBase {
 
     @Test
     @WithMockUser
-    public void testCreateNewTaskFail() throws Exception {
+    public void testCreationOfTaskWithBadData() throws Exception {
         TaskDto testTaskDto = new TaskDto(
                 testEvent1.getId(),
                 null,
@@ -233,7 +233,7 @@ public class TaskControllerTest extends TestBase {
 
     @Test
     @WithMockUser
-    public void testUpdateTask() throws Exception {
+    public void testUpdatingTask() throws Exception {
         String url = "/tasks/" + testTask1.getId();
 
         logger.debug("Sending request on {}", url);
@@ -283,7 +283,7 @@ public class TaskControllerTest extends TestBase {
 
     @Test
     @WithMockUser
-    public void testUpdateTaskFail() throws Exception {
+    public void testUpdatingNonExistingTask() throws Exception {
         String url = "/tasks/" + -10L;
 
         logger.debug("Sending request on {}", url);
@@ -295,7 +295,7 @@ public class TaskControllerTest extends TestBase {
 
     @Test
     @WithMockUser
-    public void testDeleteTask() throws Exception {
+    public void testDeletingTask() throws Exception {
         int startingSize = taskRepository.getTasks().size();
 
         String url = "/tasks/" + testTask1.getId();
@@ -318,7 +318,7 @@ public class TaskControllerTest extends TestBase {
 
     @Test
     @WithMockUser
-    public void testDeleteTaskFail() throws Exception {
+    public void testDeletingNonExistingTask() throws Exception {
         String url = "/tasks/" + -10L;
 
         logger.debug("Sending request on {}", url);

@@ -83,7 +83,7 @@ public class EventControllerTest extends TestBase {
 
     @Test
     @WithMockUser
-    public void testReadSingleEvent() throws Exception {
+    public void testReadingSingleEvent() throws Exception {
         final String url = "/events/" + event.getId();
 
         logger.debug("Sending request on {}", url);
@@ -101,7 +101,7 @@ public class EventControllerTest extends TestBase {
 
     @Test
     @WithMockUser
-    public void testReadSingleEventFail() throws Exception {
+    public void testReadingNonExistingEvent() throws Exception {
         final String url = "/events/" + -1L;
 
         logger.debug("Sending request on {}", url);
@@ -114,7 +114,7 @@ public class EventControllerTest extends TestBase {
 
     @Test
     @WithMockUser
-    public void testReadEvents() throws Exception {
+    public void testReadingAllEvents() throws Exception {
         final String url = "/events";
 
         logger.debug("Sending request on {}", url);
@@ -136,7 +136,7 @@ public class EventControllerTest extends TestBase {
 
     @Test
     @WithMockUser
-    public void testDeleteEvent() throws Exception {
+    public void testDeletingEvent() throws Exception {
         Event testEvent1 = eventRepository.getEventByName(TEST_EVENT_NAME_1);
         String url = "/events/" + testEvent1.getId();
 
@@ -153,8 +153,8 @@ public class EventControllerTest extends TestBase {
 
     @Test
     @WithMockUser
-    public void testDeleteEventFail() throws Exception {
-        String url = "/events/" + "727753";
+    public void testDeletingNonExistingEvent() throws Exception {
+        String url = "/events/" + 1L;
 
         logger.debug("Sending request on {}", url);
 
@@ -166,7 +166,7 @@ public class EventControllerTest extends TestBase {
 
     @Test
     @WithMockUser
-    public void testCreateReadEvents() throws Exception {
+    public void testCreationOfEvents() throws Exception {
         Event testEvent = new Event(TEST_EVENT_NAME_3, TEST_EVENT_SHORT_NAME_3, TEST_EVENT_YEAR_3);
         String url = "/events";
 
@@ -190,7 +190,7 @@ public class EventControllerTest extends TestBase {
 
     @Test
     @WithMockUser
-    public void testPutReadEvent() throws Exception {
+    public void testUpdatingEvent() throws Exception {
         Event testEvent = eventRepository.getEventByName(TEST_EVENT_NAME_1);
 
         testEvent.setName(TEST_EVENT_NAME_3);
@@ -214,7 +214,7 @@ public class EventControllerTest extends TestBase {
 
     @Test
     @WithMockUser
-    public void testPutFail() throws Exception {
+    public void testUpdatingNonExistingEvent() throws Exception {
         Event testEvent = new Event(TEST_EVENT_YEAR_3, TEST_EVENT_SHORT_NAME_3, TEST_EVENT_YEAR_3);
         String url = "/events/" + -1L;
 
@@ -230,7 +230,7 @@ public class EventControllerTest extends TestBase {
 
     @Test
     @WithMockUser
-    public void testGetTasksForEvent() throws Exception {
+    public void testGettingTasksForEvent() throws Exception {
         String url = "/events/" + event.getId() + "/tasks";
 
         logger.debug("Sending GET request on {}", url);
@@ -258,7 +258,7 @@ public class EventControllerTest extends TestBase {
 
     @Test
     @WithMockUser
-    public void testGetUnassignedCompaniesForEvent() throws Exception {
+    public void testGettingUnassignedCompaniesForEvent() throws Exception {
         String url = "/events/" + event.getId() + "/tasks/assign";
 
         logger.debug("Sending GET request on {}", url);
@@ -293,7 +293,7 @@ public class EventControllerTest extends TestBase {
 
     @Test
     @WithMockUser
-    public void testGetTasksForEventFail() throws Exception {
+    public void testGettingTasksForNonExistingEvent() throws Exception {
         String url = "/events/" + -1L + "/tasks";
 
         logger.debug("Sending GET request on {}", url);
@@ -306,7 +306,7 @@ public class EventControllerTest extends TestBase {
 
     @Test
     @WithMockUser
-    public void testGetUsersForEvent() throws Exception {
+    public void testGettingUsersForEvent() throws Exception {
         String url = "/events/" + event.getId() + "/users";
 
         logger.debug("Sending GET request on {}", url);
@@ -328,7 +328,7 @@ public class EventControllerTest extends TestBase {
 
     @Test
     @WithMockUser
-    public void testGetUsersForEventFail() throws Exception {
+    public void testGetUsersForNonExistingEvent() throws Exception {
         String url = "/events/" + -1L + "/events";
 
         logger.debug("Sending GET request on {}", url);
