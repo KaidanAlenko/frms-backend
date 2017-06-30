@@ -17,39 +17,103 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.test.context.support.WithMockUser;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 public class TaskControllerTest extends TestBase {
 
     private static final Logger logger = LoggerFactory.getLogger(TaskControllerTest.class);
 
-    private Task task, task2, task3;
-    private Event event, event2, event3;
-    private User user;
-    private Company company, company2;
+    private static final String TEST_EVENT_NAME_1 = "TestName1";
+    private static final String TEST_EVENT_SHORT_NAME_1 = "TN1";
+    private static final String TEST_EVENT_YEAR_1 = "2017";
+
+    private static final String TEST_EVENT_NAME_2 = "TestName2";
+    private static final String TEST_EVENT_SHORT_NAME_2 = "TN2";
+    private static final String TEST_EVENT_YEAR_2 = "2017";
+
+    private static final String TEST_EVENT_NAME_3 = "TestName3";
+    private static final String TEST_EVENT_SHORT_NAME_3 = "TN3";
+    private static final String TEST_EVENT_YEAR_3 = "2017";
+
+    private static final String TEST_COMPANY_NAME_1 = "TestCompanyName1";
+    private static final String TEST_COMPANY_SHORT_NAME_1 = "TC1";
+
+    private static final String TEST_COMPANY_NAME_2 = "TestCompanyName2";
+    private static final String TEST_COMPANY_SHORT_NAME_2 = "TC2";
+
+    private static final String TEST_USER_FIRST_NAME = "TestFirstName";
+    private static final String TEST_USER_LAST_NAME = "TestLastName";
+    private static final String TEST_USER_MAIL = "Test@Mail.MM";
+
+    private static final String DUMMY_VALUE = "DummyValue";
+
+    private Task testTask1;
+    private Event testEvent1;
+    private User testUser;
+    private Company testCompany2;
 
     @Before
     public void setTestData() {
-        event = new Event("E", "E", "2017");
-        event2 = new Event("E2", "E2", "2017");
-        event3 = new Event("E", "E", "2016");
-        user = new User("F", "L", "email1", "pass1", "0001", Role.USER, null);
-        company = new Company("COMPANY", "C", CompanyType.COMPUTING);
-        company2 = new Company("COMPANY2", "C", CompanyType.COMPUTING_SCIENCE);
-        companyRepository.createCompany(company);
-        companyRepository.createCompany(company2);
-        eventRepository.createEvent(event);
-        eventRepository.createEvent(event2);
-        eventRepository.createEvent(event3);
-        userRepository.createUser(user);
+        testEvent1 = new Event(TEST_EVENT_NAME_1, TEST_EVENT_SHORT_NAME_1, TEST_EVENT_YEAR_1);
+        Event testEvent2 = new Event(TEST_EVENT_NAME_2, TEST_EVENT_SHORT_NAME_2, TEST_EVENT_YEAR_2);
+        Event testEvent3 = new Event(TEST_EVENT_NAME_3, TEST_EVENT_SHORT_NAME_3, TEST_EVENT_YEAR_3);
 
-        task = new Task(event, company, user, SponsorshipType.MATERIAL, null, null, null, TaskStatus.IN_PROGRESS, "");
-        taskRepository.createTask(task);
-        task2 = new Task(event, company, user, SponsorshipType.MATERIAL, null, null, null, TaskStatus.IN_PROGRESS, "");
-        taskRepository.createTask(task2);
-        task3 = new Task(event, company, user, SponsorshipType.MATERIAL, null, null, null, TaskStatus.ACCEPTED, "");
-        taskRepository.createTask(task3);
+        testUser = new User(
+                TEST_USER_FIRST_NAME,
+                TEST_USER_LAST_NAME,
+                TEST_USER_MAIL,
+                DUMMY_VALUE,
+                DUMMY_VALUE,
+                Role.USER, null
+        );
+
+        Company testCompany1 = new Company(TEST_COMPANY_NAME_1, TEST_COMPANY_SHORT_NAME_1, CompanyType.COMPUTING);
+        testCompany2 = new Company(TEST_COMPANY_NAME_2, TEST_COMPANY_SHORT_NAME_2, CompanyType.COMPUTING_SCIENCE);
+
+        companyRepository.createCompany(testCompany1);
+        companyRepository.createCompany(testCompany2);
+
+        eventRepository.createEvent(testEvent1);
+        eventRepository.createEvent(testEvent2);
+        eventRepository.createEvent(testEvent3);
+
+        userRepository.createUser(testUser);
+
+        testTask1 = new Task(
+                testEvent1,
+                testCompany1,
+                testUser,
+                SponsorshipType.MATERIAL,
+                null, null, null,
+                TaskStatus.IN_PROGRESS,
+                ""
+        );
+        taskRepository.createTask(testTask1);
+
+        Task testTask2 = new Task(
+                testEvent1,
+                testCompany1,
+                testUser,
+                SponsorshipType.MATERIAL,
+                null, null, null,
+                TaskStatus.IN_PROGRESS,
+                ""
+        );
+        taskRepository.createTask(testTask2);
+
+        Task testTask3 = new Task(
+                testEvent1,
+                testCompany1,
+                testUser,
+                SponsorshipType.MATERIAL,
+                null, null, null,
+                TaskStatus.ACCEPTED,
+                ""
+        );
+        taskRepository.createTask(testTask3);
     }
 
     @Test
@@ -62,41 +126,43 @@ public class TaskControllerTest extends TestBase {
         logger.debug("Response: {}", response.getContentAsString());
         assertEquals(200, response.getStatus());
 
-        //List<Task> tasks = taskRepository.getTasks();
         List<Task> tasks = jacksonService.readListOfObjects(response.getContentAsString(), Task.class);
         assertEquals(2, tasks.size());
-        for (int i = 0; i < tasks.size(); i++) {
-            assertEquals(TaskStatus.IN_PROGRESS, tasks.get(i).getStatus());
-        }
+
+        Optional<Task> anyNotInProgressTask = tasks.stream()
+                .filter(t -> !t.getStatus().equals(TaskStatus.IN_PROGRESS))
+                .findAny();
+
+        assertFalse("Not all tasks are of status IN_PROGRESS", anyNotInProgressTask.isPresent());
     }
 
     @Test
     @WithMockUser
     public void testGetTaskByID() throws Exception {
-        final String url = "/tasks/" + task.getId();
+        final String url = "/tasks/" + testTask1.getId();
 
         logger.debug("Sending request on {}", url);
         MockHttpServletResponse response = get(url);
         logger.debug("Response: {}", response.getContentAsString());
-        //response 404??
+
         assertEquals(200, response.getStatus());
 
         Task t1 = jacksonService.readJson(response.getContentAsString(), Task.class);
-        assertEquals(task.getId(), t1.getId());
+        assertEquals(testTask1.getId(), t1.getId());
     }
 
     @Test
     @WithMockUser
     public void testGetTaskByIDFail() throws Exception {
-        final String url = "/tasks/" + 75555L;
+        final String url = "/tasks/" + -1L;
 
         logger.debug("Sending request on {}", url);
         MockHttpServletResponse response = get(url);
+
         logger.debug("Response: {}", response.getContentAsString());
         assertEquals(404, response.getStatus());
     }
 
-    @SuppressWarnings("unchecked")
     @Test
     @WithMockUser
     public void filterTasks() throws Exception {
@@ -105,9 +171,10 @@ public class TaskControllerTest extends TestBase {
         logger.debug("Sending request on {}", url);
         MockHttpServletResponse response = get(url);
         logger.debug("Response: {}", response.getContentAsString());
+
         assertEquals(200, response.getStatus());
 
-        List<Task> foundTasks = jacksonService.readJson(response.getContentAsString(), List.class);
+        List<Task> foundTasks = jacksonService.readListOfObjects(response.getContentAsString(), Task.class);
 
         assertEquals(2, foundTasks.size());
     }
@@ -115,89 +182,113 @@ public class TaskControllerTest extends TestBase {
     @Test
     @WithMockUser
     public void testCreateNewTask() throws Exception {
-        TaskDto task4 = new TaskDto(event.getId(), company2.getId(), user.getId(), SponsorshipType.MATERIAL, null, null, null, TaskStatus.IN_PROGRESS, "");
+        TaskDto testTaskDto = new TaskDto(
+                testEvent1.getId(),
+                testCompany2.getId(),
+                testUser.getId(),
+                SponsorshipType.MATERIAL,
+                null, null, null,
+                TaskStatus.IN_PROGRESS,
+                ""
+        );
 
         String url = "/tasks";
-        String c2Json = jacksonService.asJson(task4);
-
+        String taskDtoJson = jacksonService.asJson(testTaskDto);
         logger.debug("Sending request on {}", url);
-        MockHttpServletResponse response = post(url, c2Json);
+
+        MockHttpServletResponse response = post(url, taskDtoJson);
         logger.debug("Response: {}", response.getContentAsString());
         assertEquals(201, response.getStatus());
 
         Task returnedTask = jacksonService.readJson(response.getContentAsString(), Task.class);
 
-        assertEquals((Long) returnedTask.getEvent().getId(), task4.getEventId());
-        assertEquals((Long) returnedTask.getCompany().getId(), task4.getCompanyId());
+        assertEquals((Long) returnedTask.getEvent().getId(), testTaskDto.getEventId());
+        assertEquals((Long) returnedTask.getCompany().getId(), testTaskDto.getCompanyId());
 
     }
 
     @Test
     @WithMockUser
     public void testCreateNewTaskFail() throws Exception {
-        TaskDto temp_t = new TaskDto(event.getId(), null, user.getId(), SponsorshipType.MATERIAL, null, null, null, TaskStatus.IN_PROGRESS, "");
+        TaskDto testTaskDto = new TaskDto(
+                testEvent1.getId(),
+                null,
+                testUser.getId(),
+                SponsorshipType.MATERIAL,
+                null, null, null,
+                TaskStatus.IN_PROGRESS,
+                ""
+        );
+
         String url = "/tasks";
-        String c2Json = jacksonService.asJson(temp_t);
+        String taskDtoJson = jacksonService.asJson(testTaskDto);
 
         logger.debug("Sending request on {}", url);
-        MockHttpServletResponse response = post(url, c2Json);
+
+        MockHttpServletResponse response = post(url, taskDtoJson);
         logger.debug("Response: {}", response.getContentAsString());
+
         assertEquals(400, response.getStatus());
     }
 
     @Test
     @WithMockUser
     public void testUpdateTask() throws Exception {
-        String url = "/tasks/" + task.getId();
+        String url = "/tasks/" + testTask1.getId();
 
         logger.debug("Sending request on {}", url);
+
         MockHttpServletResponse response = get(url);
         logger.debug("Response: {}", response.getContentAsString());
+
         assertEquals(200, response.getStatus());
 
-        //update
-        Task t1 = jacksonService.readJson(response.getContentAsString(), Task.class);
+        // update
+        Task testTask = jacksonService.readJson(response.getContentAsString(), Task.class);
 
         TaskDto taskDto = new TaskDto(
-                t1.getEvent().getId(),
-                t1.getCompany().getId(),
-                t1.getAssignee().getId(),
-                t1.getType(),
-                t1.getCallTime(),
-                t1.getMailTime(),
-                t1.getFollowUpTime(),
-                t1.getStatus(),
-                t1.getNotes());
+                testTask.getEvent().getId(),
+                testTask.getCompany().getId(),
+                testTask.getAssignee().getId(),
+                testTask.getType(),
+                testTask.getCallTime(),
+                testTask.getMailTime(),
+                testTask.getFollowUpTime(),
+                testTask.getStatus(),
+                testTask.getNotes());
 
-        taskDto.setCompanyId(company2.getId());
+        taskDto.setCompanyId(testCompany2.getId());
 
-        //post updated task
-        String c2Json = jacksonService.asJson(taskDto);
+        // POST updated testTask1
+        String testTaskDto = jacksonService.asJson(taskDto);
+
         logger.debug("Sending request on {}", url);
-        response = put(url, c2Json);
+
+        response = put(url, testTaskDto);
         logger.debug("Response: {}", response.getContentAsString());
+
         assertEquals(200, response.getStatus());
 
-        //check if task is updated
-        url = "/tasks/" + task.getId();
+        // check if testTask1 is updated
+        url = "/tasks/" + testTask1.getId();
+
         logger.debug("Sending request on {}", url);
+
         response = get(url);
         logger.debug("Response: {}", response.getContentAsString());
+
         assertEquals(200, response.getStatus());
-
-        //t1 = jacksonService.readJson(response.getContentAsString(), Task.class);
-        assertEquals(company2, taskRepository.getTask(task.getId()).getCompany());
-
-
+        assertEquals(testCompany2, taskRepository.getTask(testTask1.getId()).getCompany());
     }
 
     @Test
     @WithMockUser
     public void testUpdateTaskFail() throws Exception {
-        String url = "/tasks/" + 777727L;
+        String url = "/tasks/" + -10L;
 
         logger.debug("Sending request on {}", url);
         MockHttpServletResponse response = get(url);
+
         logger.debug("Response: {}", response.getContentAsString());
         assertEquals(404, response.getStatus());
     }
@@ -206,34 +297,36 @@ public class TaskControllerTest extends TestBase {
     @WithMockUser
     public void testDeleteTask() throws Exception {
         int startingSize = taskRepository.getTasks().size();
-        String url = "/tasks/" + task.getId();
+
+        String url = "/tasks/" + testTask1.getId();
+
         logger.debug("Sending request on {}", url);
+
         MockHttpServletResponse response = get(url);
         logger.debug("Response: {}", response.getContentAsString());
+
         assertEquals(200, response.getStatus());
 
         logger.debug("Sending request on {}", url);
         response = delete(url);
+
         logger.debug("Response: {}", response.getContentAsString());
         assertEquals(200, response.getStatus());
 
-        //Task t=taskRepository.getTask(task.getId());
         assertEquals(startingSize - 1, taskRepository.getTasks().size());
-//        logger.debug("Sending request on {}", url);
-//        response = get(url);
-//        logger.debug("Response: {}", response.getContentAsString());
-
     }
 
     @Test
     @WithMockUser
     public void testDeleteTaskFail() throws Exception {
-        String url = "/tasks/" + 777727L;
+        String url = "/tasks/" + -10L;
+
         logger.debug("Sending request on {}", url);
+
         MockHttpServletResponse response = delete(url);
         logger.debug("Response: {}", response.getContentAsString());
-        assertEquals(404, response.getStatus());
 
+        assertEquals(404, response.getStatus());
     }
 
 

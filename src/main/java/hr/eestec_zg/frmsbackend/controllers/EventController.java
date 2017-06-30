@@ -90,6 +90,7 @@ public class EventController {
         if (id == null) {
             throw new IllegalArgumentException("Id must not be null value");
         }
+
         return taskService.getTasksByEvent(id);
     }
 

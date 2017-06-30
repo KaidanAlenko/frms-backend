@@ -11,5 +11,6 @@ public class StatusController {
 
     @RequestMapping(value = "/status", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
-    public void getStatus() {}
+    public void getStatus() {
+    }
 }

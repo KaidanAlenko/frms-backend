@@ -23,25 +23,52 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 
 public class UserControllerTest extends TestBase {
-
     private static final Logger logger = LoggerFactory.getLogger(UserControllerTest.class);
+
+    private static final String TEST_USER_FIRST_NAME_1 = "TestFirstName1";
+    private static final String TEST_USER_LAST_NAME_1 = "TestLastName1";
+    private static final String TEST_USER_MAIL_1 = "Test1@Mail.MM";
+
+    private static final String TEST_USER_FIRST_NAME_2 = "TestFirstName1";
+    private static final String TEST_USER_LAST_NAME_2 = "TestLastName1";
+    private static final String TEST_USER_MAIL_2 = "Test2@Mail.MM";
+
+    private static final String DUMMY_VALUE = "DummyValue";
 
     @Autowired
     private UserService userService;
-    private User user1, user2;
+    private User testUser1;
 
     @Before
     public void setTestData() {
-        user1 = new User("F", "L", "email1", "pass1", "0001", Role.USER, null);
-        user2 = new User("F", "A", "email2", "pass2", "0002", Role.COORDINATOR, null);
-        userService.createUser(user1);
-        userService.createUser(user2);
+        testUser1 = new User(
+                TEST_USER_FIRST_NAME_1,
+                TEST_USER_LAST_NAME_1,
+                TEST_USER_MAIL_1,
+                DUMMY_VALUE,
+                DUMMY_VALUE,
+                Role.USER,
+                null
+        );
+
+        User testUser2 = new User(
+                TEST_USER_FIRST_NAME_2,
+                TEST_USER_LAST_NAME_2,
+                TEST_USER_MAIL_2,
+                DUMMY_VALUE,
+                DUMMY_VALUE,
+                Role.COORDINATOR,
+                null
+        );
+
+        userService.createUser(testUser1);
+        userService.createUser(testUser2);
     }
 
     @Test
     @WithMockUser
     public void testReadSingleUser() throws Exception {
-        final String url = "/users/" + user1.getId();
+        final String url = "/users/" + testUser1.getId();
         logger.debug("Sending request on {}", url);
 
         MockHttpServletResponse response = get(url);
@@ -51,16 +78,16 @@ public class UserControllerTest extends TestBase {
         assertEquals(200, response.getStatus());
         User user = jacksonService.readJson(response.getContentAsString(), User.class);
 
-        assertEquals(user1.getId(), user.getId());
-        assertEquals("F", user.getFirstName());
-        assertEquals("L", user.getLastName());
-        assertEquals("email1", user.getEmail());
+        assertEquals(testUser1.getId(), user.getId());
+        assertEquals(TEST_USER_FIRST_NAME_1, user.getFirstName());
+        assertEquals(TEST_USER_LAST_NAME_1, user.getLastName());
+        assertEquals(TEST_USER_MAIL_1, user.getEmail());
     }
 
     @Test
     @WithMockUser
     public void testReadSingleUserFail() throws Exception {
-        final String url = "/users/" + 77777L;
+        final String url = "/users/" + -1L;
         logger.debug("Sending request on {}", url);
 
         MockHttpServletResponse response = get(url);
@@ -81,30 +108,40 @@ public class UserControllerTest extends TestBase {
         logger.debug("Response: {}", response.getContentAsString());
 
         assertEquals(200, response.getStatus());
+
         List<User> users = jacksonService.readListOfObjects(response.getContentAsString(), User.class);
         assertEquals(2, users.size());
-        User u2 = users.get(1);
-        assertEquals(user1, users.get(0));
-        assertEquals("F", u2.getFirstName());
-        assertEquals("A", u2.getLastName());
+
+        User testUser2 = users.get(1);
+        assertEquals(testUser1, users.get(0));
+        assertEquals(TEST_USER_FIRST_NAME_1, testUser2.getFirstName());
+        assertEquals(TEST_USER_LAST_NAME_1, testUser2.getLastName());
     }
 
     @Test
     @WithMockUser
     public void testDeleteReadUser() throws Exception {
-        long userId = userService.getUserByEmail("email1").getId();
+        long userId = userService.getUserByEmail(TEST_USER_MAIL_1).getId();
         String url = "/users/" + userId;
+
         logger.debug("Sending request on {}", url);
+
         MockHttpServletResponse response = get(url);
         logger.debug("Response: {}", response.getContentAsString());
+
         assertEquals(200, response.getStatus());
         logger.debug("Sending request on {}", url);
+
         response = delete(url);
         logger.debug("Response: {}", response.getContentAsString());
+
         assertEquals(200, response.getStatus());
+
         logger.debug("Sending request on {}", url);
+
         response = get(url);
         logger.debug("Response: {}", response.getContentAsString());
+
         assertEquals(404, response.getStatus());
     }
 
@@ -112,10 +149,10 @@ public class UserControllerTest extends TestBase {
     @Test
     @WithMockUser
     public void testCreateReadUsers() throws Exception {
-        User user3 = new User("Fifo", "Lifo", "email1i@fer.hr", "pass9", "02001", Role.USER, null);
+        User testUser1 = new User("Fifo", "Lifo", "email@example.com", "pass", "02001", Role.USER, null);
 
         String url = "/users";
-        String c2Json = jacksonService.asJson(user3);
+        String c2Json = jacksonService.asJson(testUser1);
         logger.debug("Sending request on {}", url);
 
         MockHttpServletResponse response = post(url, c2Json);
@@ -128,76 +165,96 @@ public class UserControllerTest extends TestBase {
         response = get(url);
         List<User> users = jacksonService.readListOfObjects(response.getContentAsString(), User.class);
         assertEquals(3, users.size());
-        User u3 = users.get(2);
+        User testUser2 = users.get(2);
 
-        assertEquals("Fifo", u3.getFirstName());
-        assertEquals("Lifo", u3.getLastName());
-        assertEquals("email1i@fer.hr", u3.getEmail());
+        assertEquals("Fifo", testUser2.getFirstName());
+        assertEquals("Lifo", testUser2.getLastName());
     }
 
     @Test
     @WithMockUser
     public void testPutReadCompany() throws Exception {
-        User u1 = userService.getUserByEmail("email1");
+        User testUser = userService.getUserByEmail(TEST_USER_MAIL_1);
 
-        String url = "/users/" + u1.getId();
+        String url = "/users/" + testUser.getId();
+
         logger.debug("Sending GET request on {}", url);
+
         MockHttpServletResponse response = get(url);
         logger.debug("Response: {}", response.getContentAsString());
+
         assertEquals(200, response.getStatus());
 
-        u1.setFirstName("Fico");
-        u1.setPhoneNumber("3232323");
+        testUser.setFirstName("FF");
+        testUser.setPhoneNumber("3232323");
 
-        String c2Json = jacksonService.asJson(u1);
+        String testUserJson = jacksonService.asJson(testUser);
 
         logger.debug("Sending PUT request on {}", url);
-        response = put(url, c2Json);
+
+        response = put(url, testUserJson);
         logger.debug("Response: {}", response.getContentAsString());
+
         assertEquals(200, response.getStatus());
 
-        u1 = userService.getUserByEmail("email1");
+        testUser = userService.getUserByEmail(TEST_USER_MAIL_1);
         logger.debug("Sending GET request on {}", url);
-        url = "/users/" + u1.getId();
+        url = "/users/" + testUser.getId();
         response = get(url);
         logger.debug("Response: {}", response.getContentAsString());
         User user = jacksonService.readJson(response.getContentAsString(), User.class);
 
-        assertEquals("Fico", user.getFirstName());
-        assertEquals("L", user.getLastName());
+        assertEquals("FF", user.getFirstName());
+        assertEquals(TEST_USER_LAST_NAME_1, user.getLastName());
         assertEquals("3232323", user.getPhoneNumber());
     }
 
     @Test
     @WithMockUser
     public void testPutFail() throws Exception {
-        User user3 = new User("Fifo", "Lifo", "email1i@fer.hr", "pass9", "02001", Role.USER, null);
-        String url = "/users/" + 777727L;
-        String c2Json = jacksonService.asJson(user3);
+        User testUser = new User("Fifo", "Lifo", "email@example.com", "pass", "02001", Role.USER, null);
+
+        String url = "/users/" + -1L;
+        String testUserJson = jacksonService.asJson(testUser);
+
         logger.debug("Sending request on {}", url);
 
-        MockHttpServletResponse response = put(url, c2Json);
+        MockHttpServletResponse response = put(url, testUserJson);
 
         logger.debug("Response: {}", response.getContentAsString());
-        url = "/users/" + 777727L;
+        url = "/users/" + -1L;
+
         logger.debug("Sending GET request on {}", url);
+
         response = get(url);
         logger.debug("Response: {}", response.getContentAsString());
+
         assertEquals(404, response.getStatus());
     }
 
     @Test
     @WithMockUser
     public void testGetUsersTasks() throws Exception {
-        User u1 = userService.getUserByEmail("email1");
-        Event event = new Event("E", "E", "2017");
-        eventRepository.createEvent(event);
-        Company c = new Company("COMPANY", "C", CompanyType.COMPUTING);
-        companyRepository.createCompany(c);
-        Task task = new Task(event, c, u1, SponsorshipType.FINANCIAL, null, null, null, TaskStatus.IN_PROGRESS, "");
+        User testUser = userService.getUserByEmail(TEST_USER_MAIL_1);
+        Event testEvent = new Event("EV", "EV", "2017");
+
+        eventRepository.createEvent(testEvent);
+
+        Company testCompany = new Company("CP", "CP", CompanyType.COMPUTING);
+        companyRepository.createCompany(testCompany);
+
+        Task task = new Task(
+                testEvent,
+                testCompany,
+                testUser,
+                SponsorshipType.FINANCIAL,
+                null, null, null,
+                TaskStatus.IN_PROGRESS,
+                ""
+        );
         taskRepository.createTask(task);
 
-        final String url = "/users/" + u1.getId() + "/tasks";
+        final String url = "/users/" + testUser.getId() + "/tasks";
         logger.debug("Sending request on {}", url);
 
         MockHttpServletResponse response = get(url);
@@ -214,9 +271,9 @@ public class UserControllerTest extends TestBase {
     @Test
     @WithMockUser
     public void testGetUsersTasksNull() throws Exception {
-        User u1 = userService.getUserByEmail("email1");
+        User testUser = userService.getUserByEmail(TEST_USER_MAIL_1);
 
-        final String url = "/users/" + u1.getId() + "/tasks";
+        final String url = "/users/" + testUser.getId() + "/tasks";
         logger.debug("Sending request on {}", url);
 
         MockHttpServletResponse response = get(url);
@@ -232,9 +289,9 @@ public class UserControllerTest extends TestBase {
     @Test
     @WithMockUser
     public void testGetStatisticsForUser() throws Exception {
-        User u1 = userService.getUserByEmail("email1");
+        User testUser = userService.getUserByEmail(TEST_USER_MAIL_1);
 
-        final String url = "/users/" + u1.getId() + "/statistics";
+        final String url = "/users/" + testUser.getId() + "/statistics";
         logger.debug("Sending request on {}", url);
 
         MockHttpServletResponse response = get(url);

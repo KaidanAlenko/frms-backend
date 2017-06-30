@@ -18,11 +18,11 @@ public class AppInitializer extends AbstractAnnotationConfigDispatcherServletIni
     }
 
     protected Class<?>[] getServletConfigClasses() {
-        return new Class<?>[] {AppConfig.class};
+        return new Class<?>[]{AppConfig.class};
     }
 
     protected String[] getServletMappings() {
-        return new String[] {"/"};
+        return new String[]{"/"};
     }
 
     @Override
@@ -32,6 +32,7 @@ public class AppInitializer extends AbstractAnnotationConfigDispatcherServletIni
             public void contextInitialized(ServletContextEvent sce) {
                 logger.info("\n\n******************* Servlet Context initialized **************************\n");
             }
+
             public void contextDestroyed(ServletContextEvent sce) {
                 logger.info("\n\n******************* Servlet Context destroyed **************************\n");
             }
