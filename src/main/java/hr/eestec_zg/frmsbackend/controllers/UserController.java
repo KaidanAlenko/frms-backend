@@ -44,7 +44,7 @@ public class UserController {
     @RequestMapping(value = "/users", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     public List<User> getUsers(String role) {
-        if (role != null && (role.equalsIgnoreCase("ADMIN") || role.equalsIgnoreCase("USER"))) {
+        if (role != null && ("ADMIN".equalsIgnoreCase(role) || "USER".equalsIgnoreCase(role))) {
             Role userRole = Role.valueOf(role);
             return userService.getUsersByRole(userRole);
         } else {
