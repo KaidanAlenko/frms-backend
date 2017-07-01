@@ -20,20 +20,17 @@ import org.springframework.security.test.context.support.WithMockUser;
 
 import java.util.List;
 
+import static hr.eestec_zg.frmsbackend.utils.TestDataUtils.DUMMY_VALUE;
+import static hr.eestec_zg.frmsbackend.utils.TestDataUtils.TEST_USER_FIRST_NAME_1;
+import static hr.eestec_zg.frmsbackend.utils.TestDataUtils.TEST_USER_FIRST_NAME_2;
+import static hr.eestec_zg.frmsbackend.utils.TestDataUtils.TEST_USER_LAST_NAME_1;
+import static hr.eestec_zg.frmsbackend.utils.TestDataUtils.TEST_USER_LAST_NAME_2;
+import static hr.eestec_zg.frmsbackend.utils.TestDataUtils.TEST_USER_MAIL_1;
+import static hr.eestec_zg.frmsbackend.utils.TestDataUtils.TEST_USER_MAIL_2;
 import static org.junit.Assert.assertEquals;
 
 public class UserControllerTest extends TestBase {
     private static final Logger logger = LoggerFactory.getLogger(UserControllerTest.class);
-
-    private static final String TEST_USER_FIRST_NAME_1 = "TestFirstName1";
-    private static final String TEST_USER_LAST_NAME_1 = "TestLastName1";
-    private static final String TEST_USER_MAIL_1 = "Test1@Mail.MM";
-
-    private static final String TEST_USER_FIRST_NAME_2 = "TestFirstName1";
-    private static final String TEST_USER_LAST_NAME_2 = "TestLastName1";
-    private static final String TEST_USER_MAIL_2 = "Test2@Mail.MM";
-
-    private static final String DUMMY_VALUE = "DummyValue";
 
     @Autowired
     private UserService userService;

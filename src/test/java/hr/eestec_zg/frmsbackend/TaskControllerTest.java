@@ -19,36 +19,29 @@ import org.springframework.security.test.context.support.WithMockUser;
 import java.util.List;
 import java.util.Optional;
 
+import static hr.eestec_zg.frmsbackend.utils.TestDataUtils.DUMMY_VALUE;
+import static hr.eestec_zg.frmsbackend.utils.TestDataUtils.TEST_COMPANY_NAME_1;
+import static hr.eestec_zg.frmsbackend.utils.TestDataUtils.TEST_COMPANY_NAME_2;
+import static hr.eestec_zg.frmsbackend.utils.TestDataUtils.TEST_COMPANY_SHORT_NAME_1;
+import static hr.eestec_zg.frmsbackend.utils.TestDataUtils.TEST_COMPANY_SHORT_NAME_2;
+import static hr.eestec_zg.frmsbackend.utils.TestDataUtils.TEST_EVENT_NAME_1;
+import static hr.eestec_zg.frmsbackend.utils.TestDataUtils.TEST_EVENT_NAME_2;
+import static hr.eestec_zg.frmsbackend.utils.TestDataUtils.TEST_EVENT_NAME_3;
+import static hr.eestec_zg.frmsbackend.utils.TestDataUtils.TEST_EVENT_SHORT_NAME_1;
+import static hr.eestec_zg.frmsbackend.utils.TestDataUtils.TEST_EVENT_SHORT_NAME_2;
+import static hr.eestec_zg.frmsbackend.utils.TestDataUtils.TEST_EVENT_SHORT_NAME_3;
+import static hr.eestec_zg.frmsbackend.utils.TestDataUtils.TEST_EVENT_YEAR_1;
+import static hr.eestec_zg.frmsbackend.utils.TestDataUtils.TEST_EVENT_YEAR_2;
+import static hr.eestec_zg.frmsbackend.utils.TestDataUtils.TEST_EVENT_YEAR_3;
+import static hr.eestec_zg.frmsbackend.utils.TestDataUtils.TEST_USER_FIRST_NAME;
+import static hr.eestec_zg.frmsbackend.utils.TestDataUtils.TEST_USER_LAST_NAME;
+import static hr.eestec_zg.frmsbackend.utils.TestDataUtils.TEST_USER_MAIL;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 public class TaskControllerTest extends TestBase {
 
     private static final Logger logger = LoggerFactory.getLogger(TaskControllerTest.class);
-
-    private static final String TEST_EVENT_NAME_1 = "TestName1";
-    private static final String TEST_EVENT_SHORT_NAME_1 = "TN1";
-    private static final String TEST_EVENT_YEAR_1 = "2017";
-
-    private static final String TEST_EVENT_NAME_2 = "TestName2";
-    private static final String TEST_EVENT_SHORT_NAME_2 = "TN2";
-    private static final String TEST_EVENT_YEAR_2 = "2017";
-
-    private static final String TEST_EVENT_NAME_3 = "TestName3";
-    private static final String TEST_EVENT_SHORT_NAME_3 = "TN3";
-    private static final String TEST_EVENT_YEAR_3 = "2017";
-
-    private static final String TEST_COMPANY_NAME_1 = "TestCompanyName1";
-    private static final String TEST_COMPANY_SHORT_NAME_1 = "TC1";
-
-    private static final String TEST_COMPANY_NAME_2 = "TestCompanyName2";
-    private static final String TEST_COMPANY_SHORT_NAME_2 = "TC2";
-
-    private static final String TEST_USER_FIRST_NAME = "TestFirstName";
-    private static final String TEST_USER_LAST_NAME = "TestLastName";
-    private static final String TEST_USER_MAIL = "Test@Mail.MM";
-
-    private static final String DUMMY_VALUE = "DummyValue";
 
     private Task testTask1;
     private Event testEvent1;
