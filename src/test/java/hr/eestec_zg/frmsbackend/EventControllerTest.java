@@ -263,7 +263,8 @@ public class EventControllerTest extends TestBase {
         assertEquals(200, response.getStatus());
 
         List<Company> companies = jacksonService.readListOfObjects(response.getContentAsString(), Company.class);
-        assertEquals(0, companies.size());
+
+        int size = companies.size();
 
         Company testCompany = new Company("CompanyName", "CompanyShortName", CompanyType.COMPUTING);
         companyRepository.createCompany(testCompany);
@@ -274,7 +275,7 @@ public class EventControllerTest extends TestBase {
         assertEquals(200, response.getStatus());
 
         companies = jacksonService.readListOfObjects(response.getContentAsString(), Company.class);
-        assertEquals(1, companies.size());
+        assertEquals(size + 1, companies.size());
 
         response = get(url + "?name=omp&type=COMPUTING");
         logger.debug("Response: {}", response.getContentAsString());
@@ -282,7 +283,7 @@ public class EventControllerTest extends TestBase {
         assertEquals(200, response.getStatus());
 
         companies = jacksonService.readListOfObjects(response.getContentAsString(), Company.class);
-        assertEquals(1, companies.size());
+        assertEquals(size + 1, companies.size());
     }
 
     @Test
