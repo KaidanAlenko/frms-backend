@@ -1,5 +1,7 @@
 package hr.eestec_zg.frmsbackend.config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -16,10 +18,12 @@ import java.util.Objects;
 
 @Component
 public class CorsFilter implements Filter {
+    private static final Logger logger = LoggerFactory.getLogger(CorsFilter.class);
 
     private final String frontendUrl;
 
     public CorsFilter(@Value("${frontend.web.url}") String frontendUrl) {
+        logger.debug("Setting frontend url to: {}", frontendUrl);
         this.frontendUrl = frontendUrl;
     }
 

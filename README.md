@@ -34,3 +34,8 @@ After you complete all previous steps, before project is ready to develop, you m
 For all additional information, contact me on `ahrga93@gmail.com` or `alen.hrga@eestec-zg.hr`
 
 Good luck! :)
+
+
+## Inportant information
+
+When you change domain, you must change `frontend.web.url` property.
