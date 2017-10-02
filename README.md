@@ -30,6 +30,9 @@ Position terminal to root of **frms-core** project and run *recreate-database.sh
 ### Run tests
 After you complete all previous steps, before project is ready to develop, you must run all tests and verify that everything is in order. It is done by right clicking on project *frms-backend* in Project view in IntelliJ IDEA. Right click -> Run all tests.
 
+### Runing project 
+Project is run with command *mvn jetty:run* in root of the folder
+
 #### You are ready to go
 For all additional information, contact me on `ahrga93@gmail.com` or `alen.hrga@eestec-zg.hr`
 
