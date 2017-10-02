@@ -38,4 +38,4 @@ Good luck! :)
 
 ## Inportant information
 
-When you change domain, you must change `frontend.web.url` property.
+When you want to change domain to local, you must change  src/main/resources/application.properties property to `frontend.web.url=http://localhost:4200` port 4200 is because ng is serving on default port 4200
