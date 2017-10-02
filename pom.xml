@@ -46,11 +46,11 @@
                 <version>9.3.0.v20150612</version>
                 <configuration>
                     <webApp>
-                        <contextPath>/</contextPath>
+                        <contextPath>/frms/api</contextPath>
                         <jettyEnvXml>${project.basedir}/src/main/resources/jetty-env.xml</jettyEnvXml>
                     </webApp>
                     <httpConnector>
-                        <port>8080</port>
+                        <port>9190</port>
                     </httpConnector>
                     <systemProperties>
                         <systemProperty>
