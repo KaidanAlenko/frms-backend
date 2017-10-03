@@ -32,14 +32,9 @@ After you complete all previous steps, before project is ready to develop, you m
 
 ### Run Project
 To run project you need to enter this command in root of the project *mvn jetty:run*
-Project will now run on port 8080 by default
+Project will now run on port **9190** by default
 
 #### You are ready to go
-For all additional information, contact me on `ahrga93@gmail.com` or `alen.hrga@eestec-zg.hr`
+For all additional information, contact me on `ahrga93@gmail.com`, `it@eestec-zg.hr` or `alen.hrga@eestec-zg.hr`
 
 Good luck! :)
-
-
-## Inportant information
-
-When you want to change domain to local, you must change  src/main/resources/application.properties property to `frontend.web.url=http://localhost:4200` port 4200 is because ng is serving on default port 4200
